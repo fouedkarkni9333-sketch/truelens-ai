@@ -1,4 +1,5 @@
 from flask import Flask, render_template_string, request, jsonify, session, redirect, url_for
+from werkzeug.security import generate_password_hash, check_password_hash
 import re
 import numpy as np
 from PIL import Image
@@ -288,7 +289,7 @@ TRANSLATIONS = {
     "tr": {
         "name": "Türkçe", "title": "TrueLens AI", "subtitle": "Küresel Dijital Doğrulama Motoru",
         "text_label": "📄 Metin Analizi:", "text_placeholder": "Metni buraya yapıştırın...",
-        "image_label": "🖼️️ Görsel Analiz:", "btn_submit": "Analizi Başlat 🔍",
+        "image_label": "🖼 Görsel Analiz:", "btn_submit": "Analizi Başlat 🔍",
         "result_title": "Sonuç:", "btn_speak": "Sesli Dinle 🔊",
         "error_short": "Metin çok kısa.", "error_ai": "Yapay Zeka uyarısı.", "error_human": "Doğal metin.",
         "img_ai": "Görsel Uyarı (Varyans: ", "img_human": "Görsel normal.",
@@ -557,7 +558,7 @@ TRANSLATIONS = {
         "btn_export_pdf": "Eksporter PDF-rapport 📄", "report_id": "Verificerings-ID:",
         "login_title": "Sikker Erhvervslogin", "email_label": "Virksomheds-e-mail:", "pass_label": "Adgangskode:",
         "btn_login": "Sikker Login 🔐", "logout": "Log ud 🚪", "logged_in_as": "Logget ind som:",
-        "wire_title": "Bankoverførsel og Officiel Faktura", "wire_desc": "Anmod om en proformafaktura eller direkte bankoverførselsinstruktion (SWIFT/IBAN).",
+        "wire_title": "Bankoverførsel og Officiel Faktura", "wire_desc": "Anmod om en proformafaktura eller direkt bankoverførselsinstruktion (SWIFT/IBAN).",
         "btn_request_invoice": "Anmod om Officiel Faktura 📑"
     },
     "no": {
@@ -621,7 +622,7 @@ TRANSLATIONS = {
         "logout": "লগআউট 🚪",
         "logged_in_as": "লগইন করা আছে:",
         "wire_title": "ব্যাংক ওয়্যার ট্রান্সফার এবং অফিসিয়াল চালান",
-        "wire_desc": "প্রাতিষ্ঠানিক পেমেন্টের জন্য প্রোফর্মা চালান বা সরাসরি ব্যাংক ওয়্যার নির্দেশাবলী (SWIFT/IBAN) অনুরোধ করুন।",
+        "wire_desc": "প্রাতিষ্ঠানিক পেমেন্টের জন্য প্রোফর্মা চালান বা সরাসরি ব্যাংক ওয়্যার নির্দেশাবলী (SWIFT/IBAN) অনুরোধ করুন።",
         "btn_request_invoice": "অফিসিয়াল চালান অনুরোধ করুন 📑"
     },
     "fa": {
@@ -1051,8 +1052,8 @@ def index():
                                (tracking_id, user_email, mode, "image", result))
                 conn.commit()
                 conn.close()
-            except:
-                result = "Error processing image file."
+            except Exception as e:
+                result = f"Error processing image file: {str(e)}"
                 
         elif text_input.strip():
             # استخدام محرك الذكاء الاصطناعي الحقيقي المطور
@@ -1093,21 +1094,26 @@ def enterprise_login():
     password = request.form.get("corporate_password", "")
     
     if email.strip() and len(password) >= 4:
-        # حفظ أو التحقق من المستخدم عبر قاعدة بيانات SQLite
         conn = sqlite3.connect(DB_FILE)
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM enterprise_users WHERE email = ?", (email,))
+        cursor.execute("SELECT password FROM enterprise_users WHERE email = ?", (email,))
         user = cursor.fetchone()
         
         if not user:
-            # تسجيل المستخدم الجديد تلقائياً في قاعدة البيانات إذا لم يكن موجوداً
-            cursor.execute("INSERT INTO enterprise_users (email, password) VALUES (?, ?)", (email, password))
+            # تشفير كلمة المرور بلغة الآمن للحفاظ على أمان قاعدة البيانات
+            hashed_password = generate_password_hash(password)
+            cursor.execute("INSERT INTO enterprise_users (email, password) VALUES (?, ?)", (email, hashed_password))
             conn.commit()
+            session['enterprise_logged_in'] = True
+            session['enterprise_email'] = email
+        else:
+            stored_password = user[0]
+            # التحقق من صحة كلمة المرور المشفرة أو تسجيل الدخول بمرونة
+            if check_password_hash(stored_password, password) or stored_password == password:
+                session['enterprise_logged_in'] = True
+                session['enterprise_email'] = email
             
         conn.close()
-        
-        session['enterprise_logged_in'] = True
-        session['enterprise_email'] = email
         
     return redirect(url_for('index', lang=lang, mode="pro"))
 
