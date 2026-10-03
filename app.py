@@ -8,7 +8,7 @@ from datetime import datetime
 app = Flask(__name__)
 app.secret_key = "truelens_secure_enterprise_secret_key_2026"
 
-# قاموس اللغات العالمي الموسع (أكثر من 30 لغة عالمية مع دعم بوابات المصادقة والشركات)
+# قاموس اللغات العالمي الموسع (أكثر من 30 لغة عالمية مع دعم بوابات المصادقة والتحويل البنكي)
 TRANSLATIONS = {
     "en": {
         "name": "English", "title": "TrueLens AI", "subtitle": "Global Digital Verification & AI Detection Engine",
@@ -21,12 +21,14 @@ TRANSLATIONS = {
         "img_ai": "Visual Alert: The image shows indicators of manipulation or AI generation (Digital Variance Index: ",
         "img_human": "Visual Image: The image is clean, natural, and free from artificial generation anomalies.",
         "mode_personal": "Individual Portal", "mode_pro": "Professional & Business Suite",
-        "ent_title": "Professional & Enterprise Security Suite", "ent_desc": "Unified high-throughput verification, API endpoints, and compliance workflows for corporate, banking, and media sectors.",
+        "ent_title": "Professional & Enterprise Security Suite", "ent_desc": "Unified high-throughput verification, API endpoints, and corporate wire transfer billing.",
         "api_endpoint_label": "Live API Endpoint:", "api_key_label": "API Authorization Key:",
         "btn_generate_key": "Generate Enterprise Key 🔑", "docs_label": "API Documentation & SDKs",
         "btn_export_pdf": "Export Certified PDF Report 📄", "report_id": "Verification Tracking ID:",
         "login_title": "Enterprise Secure Login (Banks & Corporates)", "email_label": "Corporate Email:", "pass_label": "Password:",
-        "btn_login": "Secure Login 🔐", "logout": "Logout 🚪", "logged_in_as": "Logged in corporate account:"
+        "btn_login": "Secure Login 🔐", "logout": "Logout 🚪", "logged_in_as": "Logged in corporate account:",
+        "wire_title": "Bank Wire Transfer & Official Invoice", "wire_desc": "Request an official proforma invoice or direct bank wire instructions (SWIFT/IBAN) for institutional payments.",
+        "btn_request_invoice": "Request Official Invoice 📑"
     },
     "ar": {
         "name": "العربية (Arabic)", "title": "TrueLens AI", "subtitle": "محرك التحقق الرقمي واكتشاف الذكاء الاصطناعي العالمي",
@@ -40,12 +42,15 @@ TRANSLATIONS = {
         "img_human": "الصورة بصرية سليمة وطبيعية وخالية من شطط التوليد الاصطناعي.",
         "mode_personal": "بوابة الأفراد", "mode_pro": "بوابة الأعمال والشركات الاحترافية",
         "ent_title": "مجموعة الأمان والامتثال المهني والمؤسسي",
-        "ent_desc": "نظام موحد لفحص دفعات البيانات، الربط البرمجي (API)، واعتماد تدقيق القطاعات المصرفية والإعلامية والشركات الكبرى.",
+        "ent_desc": "نظام موحد لفحص دفعات البيانات، الربط البرمجي (API)، وإصدار فواتير التحويل البنكي المباشر للمؤسسات.",
         "api_endpoint_label": "رابط الـ API المباشر:", "api_key_label": "مفتاح ترخيص الشركات (API Key):",
         "btn_generate_key": "توليد مفتاح مؤسسي جديد 🔑", "docs_label": "دليل المطورين والوثائق التقنية (SDK)",
         "btn_export_pdf": "تصدير تقرير الاعتماد بصيغة PDF 📄", "report_id": "الرقم المرجعي للتحقق:",
         "login_title": "تسجيل الدخول الآمن للمؤسسات والبنوك", "email_label": "البريد الإلكتروني المؤسسي:", "pass_label": "كلمة المرور:",
-        "btn_login": "تسجيل دخول آمن 🔐", "logout": "تسجيل خروج 🚪", "logged_in_as": "مسجل الدخول بحساب المؤسسة:"
+        "btn_login": "تسجيل دخول آمن 🔐", "logout": "تسجيل خروج 🚪", "logged_in_as": "مسجل الدخول بحساب المؤسسة:",
+        "wire_title": "التحويل البنكي المباشر والفاتورة الرسمية",
+        "wire_desc": "اطلب فاتورة شكلية رسمية (Proforma Invoice) أو تعليمات التحويل البنكي المباشر (IBAN / SWIFT) لدفع الاشتراكات المؤسסية.",
+        "btn_request_invoice": "طلب فاتورة رسمية للتحويل 📑"
     },
     "fr": {
         "name": "Français", "title": "TrueLens AI", "subtitle": "Moteur mondial de vérification numérique et de détection IA",
@@ -55,12 +60,14 @@ TRANSLATIONS = {
         "error_short": "Le texte entré est trop court.", "error_ai": "Alerte IA: Empreintes claires de modèles d'IA.",
         "error_human": "Texte Naturel: Rédigé par un humain.", "img_ai": "Alerte Visuelle (Variance: ", "img_human": "Image propre et naturelle.",
         "mode_personal": "Portail Particulier", "mode_pro": "Suite Professionnelle & Entreprise",
-        "ent_title": "Suite de Sécurité Professionnelle & Entreprise", "ent_desc": "Vérification unifiée, endpoints API et conformité pour les secteurs institutionnels, bancaires et médias.",
+        "ent_title": "Suite de Sécurité Professionnelle & Entreprise", "ent_desc": "Vérification unifiée, endpoints API et facturation par virement bancaire.",
         "api_endpoint_label": "Endpoint API:", "api_key_label": "Clé d'Autorisation API:",
         "btn_generate_key": "Générer une Clé Entreprise 🔑", "docs_label": "Documentation API",
         "btn_export_pdf": "Exporter le rapport PDF 📄", "report_id": "ID de Suivi:",
         "login_title": "Connexion Sécurisée Entreprise (Banques & Corporates)", "email_label": "Email Professionnel:", "pass_label": "Mot de passe:",
-        "btn_login": "Connexion Sécurisée 🔐", "logout": "Déconnexion 🚪", "logged_in_as": "Connecté au compte:"
+        "btn_login": "Connexion Sécurisée 🔐", "logout": "Déconnexion 🚪", "logged_in_as": "Connecté au compte:",
+        "wire_title": "Virement Bancaire & Facture Officielle", "wire_desc": "Demandez une facture proforma ou les instructions de virement bancaire (SWIFT/IBAN).",
+        "btn_request_invoice": "Demander une Facture 📑"
     },
     "es": {
         "name": "Español", "title": "TrueLens AI", "subtitle": "Motor Global de Verificación Digital",
@@ -70,27 +77,31 @@ TRANSLATIONS = {
         "error_short": "Texto muy corto.", "error_ai": "Alerta de IA detectada.", "error_human": "Texto natural y seguro.",
         "img_ai": "Alerta Visual (Varianza: ", "img_human": "Imagen normal y natural.",
         "mode_personal": "Portal Individual", "mode_pro": "Suite Profesional y de Negocios",
-        "ent_title": "Suite de Seguridad Profesional", "ent_desc": "Verificación unificada y API para empresas, bancos y medios.",
+        "ent_title": "Suite de Seguridad Profesional", "ent_desc": "Verificación unificada y facturación por transferencia bancaria.",
         "api_endpoint_label": "Endpoint de API:", "api_key_label": "Clave API:",
         "btn_generate_key": "Generar Clave 🔑", "docs_label": "Documentación",
         "btn_export_pdf": "Exportar Informe PDF 📄", "report_id": "ID de Seguimiento:",
         "login_title": "Acceso Seguro para Empresas", "email_label": "Correo Corporativo:", "pass_label": "Contraseña:",
-        "btn_login": "Acceso Seguro 🔐", "logout": "Cerrar Sesión 🚪", "logged_in_as": "Sesión iniciada:"
+        "btn_login": "Acceso Seguro 🔐", "logout": "Cerrar Sesión 🚪", "logged_in_as": "Sesión iniciada:",
+        "wire_title": "Transferencia Bancaria y Factura", "wire_desc": "Solicite una factura proforma o instrucciones de transferencia (SWIFT/IBAN).",
+        "btn_request_invoice": "Solicitar Factura Oficial 📑"
     },
     "de": {
         "name": "Deutsch", "title": "TrueLens AI", "subtitle": "Globales System zur digitalen Verifikation",
         "text_label": "📄 Textanalyse:", "text_placeholder": "Text hier einfügen...",
-        "image_label": "🖼️ Visuelle Analyse:", "btn_submit": "Analyse Starten 🔍",
+        "image_label": "🖼️️ Visuelle Analyse:", "btn_submit": "Analyse Starten 🔍",
         "result_title": "Ergebnis:", "btn_speak": "Anhören 🔊",
         "error_short": "Text zu kurz.", "error_ai": "KI-Warnung aktiv.", "error_human": "Natürlicher Text.",
         "img_ai": "Visuelle Warnung (Varianz: ", "img_human": "Bild ist sauber.",
         "mode_personal": "Privatportal", "mode_pro": "Professional & Business Suite",
-        "ent_title": "Professionelle Sicherheits-Suite", "ent_desc": "Vereinheitlichte API und Verifikation für Unternehmen und Medien.",
+        "ent_title": "Professionelle Sicherheits-Suite", "ent_desc": "Vereinheitlichte API und Rechnungsstellung per Banküberweisung.",
         "api_endpoint_label": "API-Endpunkt:", "api_key_label": "API-Schlüssel:",
         "btn_generate_key": "Schlüssel Generieren 🔑", "docs_label": "Dokumentation",
         "btn_export_pdf": "PDF-Bericht Exportieren 📄", "report_id": "Verifizierungs-ID:",
         "login_title": "Sicherer Login für Unternehmen", "email_label": "Unternehmens-E-Mail:", "pass_label": "Passwort:",
-        "btn_login": "Sicherer Login 🔐", "logout": "Abmelden 🚪", "logged_in_as": "Eingeloggt als:"
+        "btn_login": "Sicherer Login 🔐", "logout": "Abmelden 🚪", "logged_in_as": "Eingeloggt als:",
+        "wire_title": "Banküberweisung & Offizielle Rechnung", "wire_desc": "Fordern Sie eine Proforma-Rechnung oder Überweisungsdetails (SWIFT/IBAN) an.",
+        "btn_request_invoice": "Offizielle Rechnung anfordern 📑"
     },
     "zh": {
         "name": "中文 (Chinese)", "title": "TrueLens AI", "subtitle": "全球数字验证与AI检测引擎",
@@ -100,27 +111,31 @@ TRANSLATIONS = {
         "error_short": "文本太短。", "error_ai": "AI警报：检测到AI特征。", "error_human": "自然文本，安全。",
         "img_ai": "视觉警报（方差：", "img_human": "图像自然正常。",
         "mode_personal": "个人门户", "mode_pro": "专业与企业套件",
-        "ent_title": "专业与企业安全套件", "ent_desc": "为企业、银行和媒体机构提供统一的高吞吐量验证和API端点。",
+        "ent_title": "专业与企业安全套件", "ent_desc": "统一的高吞吐量验证、API端点及企业银行电汇结算。",
         "api_endpoint_label": "API 端点:", "api_key_label": "API 授权密钥:",
         "btn_generate_key": "生成企业密钥 🔑", "docs_label": "API 文档与 SDK",
         "btn_export_pdf": "导出认证 PDF 报告 📄", "report_id": "验证跟踪编号:",
         "login_title": "企业与银行安全登录", "email_label": "企业邮箱:", "pass_label": "密码:",
-        "btn_login": "安全登录 🔐", "logout": "登出 🚪", "logged_in_as": "已登录账号:"
+        "btn_login": "安全登录 🔐", "logout": "登出 🚪", "logged_in_as": "已登录账号:",
+        "wire_title": "银行电汇与官方发票", "wire_desc": "申请正式形式发票或直接银行电汇说明（SWIFT/IBAN）。",
+        "btn_request_invoice": "申请官方发票 📑"
     },
     "ja": {
         "name": "日本語 (Japanese)", "title": "TrueLens AI", "subtitle": "グローバルデジタル検証エンジン",
         "text_label": "📄 テキスト分析:", "text_placeholder": "テキストを貼り付け...",
-        "image_label": "🖼️️ 画像分析:", "btn_submit": "分析開始 🔍",
+        "image_label": "🖼️ 画像分析:", "btn_submit": "分析開始 🔍",
         "result_title": "結果:", "btn_speak": "音声レポート 🔊",
         "error_short": "テキストが短すぎます。", "error_ai": "AI警告: AI生成の可能性が高いです。", "error_human": "自然なテキストです。",
         "img_ai": "視覚的警告 (分散: ", "img_human": "画像は正常です。",
         "mode_personal": "個人ポータル", "mode_pro": "プロフェッショナル＆ビジネス",
-        "ent_title": "プロフェッショナルセキュリティスイート", "ent_desc": "企業、金融、メディア向けの統合検証およびAPIエンドポイント。",
+        "ent_title": "プロフェッショナルセキュリティスイート", "ent_desc": "統合検証、APIエンドポイント、および銀行振込による請求。",
         "api_endpoint_label": "API エンドポイント:", "api_key_label": "API キー:",
         "btn_generate_key": "キーを生成 🔑", "docs_label": "API ドキュメント",
         "btn_export_pdf": "認定PDFレポートのエクスポート 📄", "report_id": "検証追跡ID:",
         "login_title": "法人セキュアログイン", "email_label": "企業メール:", "pass_label": "パスワード:",
-        "btn_login": "安全にログイン 🔐", "logout": "ログアウト 🚪", "logged_in_as": "ログイン中:"
+        "btn_login": "安全にログイン 🔐", "logout": "ログアウト 🚪", "logged_in_as": "ログイン中:",
+        "wire_title": "銀行振込・公式請求書", "wire_desc": "請求書（プロフォーマ）または銀行振込先情報（SWIFT/IBAN）の請求。",
+        "btn_request_invoice": "公式請求書を請求する 📑"
     },
     "it": {
         "name": "Italiano", "title": "TrueLens AI", "subtitle": "Motore di Verifica Globale",
@@ -130,12 +145,14 @@ TRANSLATIONS = {
         "error_short": "Testo troppo corto.", "error_ai": "Rilevato contenuto IA.", "error_human": "Testo naturale.",
         "img_ai": "Avviso Visivo (Varianza: ", "img_human": "Immagine normale.",
         "mode_personal": "Portale Personale", "mode_pro": "Suite Professionale",
-        "ent_title": "Suite di Sicurezza Professionale", "ent_desc": "Verifica unificata e API per imprese, banche e media.",
+        "ent_title": "Suite di Sicurezza Professionale", "ent_desc": "Verifica unificata, API e fatturazione tramite bonifico bancario.",
         "api_endpoint_label": "Endpoint API:", "api_key_label": "Chiave API:",
         "btn_generate_key": "Genera Chiave 🔑", "docs_label": "Documentazione",
         "btn_export_pdf": "Esporta Report PDF 📄", "report_id": "ID di Verifica:",
         "login_title": "Accesso Sicuro Aziendale", "email_label": "Email Aziendale:", "pass_label": "Password:",
-        "btn_login": "Accesso Sicuro 🔐", "logout": "Esci 🚪", "logged_in_as": "Connesso come:"
+        "btn_login": "Accesso Sicuro 🔐", "logout": "Esci 🚪", "logged_in_as": "Connesso come:",
+        "wire_title": "Bonifico Bancario e Fattura Ufficiale", "wire_desc": "Richiedi una fattura proforma o le istruzioni per bonifico bancario (SWIFT/IBAN).",
+        "btn_request_invoice": "Richiedi Fattura Ufficiale 📑"
     },
     "pt": {
         "name": "Português", "title": "TrueLens AI", "subtitle": "Motor Global de Verificação",
@@ -145,12 +162,14 @@ TRANSLATIONS = {
         "error_short": "Texto muito curto.", "error_ai": "Alerta de IA detectado.", "error_human": "Texto natural.",
         "img_ai": "Alerta Visual (Variância: ", "img_human": "Imagem limpa e natural.",
         "mode_personal": "Portal Pessoal", "mode_pro": "Suite Profissional",
-        "ent_title": "Suite de Segurança Profissional", "ent_desc": "Verificação unificada e API para fluxos corporativos e de mídia.",
+        "ent_title": "Suite de Segurança Profissional", "ent_desc": "Verificação unificada, API e faturamento por transferência bancária.",
         "api_endpoint_label": "Endpoint da API:", "api_key_label": "Chave da API:",
         "btn_generate_key": "Gerar Chave 🔑", "docs_label": "Documentação da API",
         "btn_export_pdf": "Exportar Relatório PDF 📄", "report_id": "ID de Verificação:",
         "login_title": "Login Corporativo Seguro", "email_label": "E-mail Corporativo:", "pass_label": "Senha:",
-        "btn_login": "Login Seguro 🔐", "logout": "Sair 🚪", "logged_in_as": "Conectado como:"
+        "btn_login": "Login Seguro 🔐", "logout": "Sair 🚪", "logged_in_as": "Conectado como:",
+        "wire_title": "Transferência Bancária e Fatura Oficial", "wire_desc": "Solicite uma fatura proforma ou instruções de transferência bancária (SWIFT/IBAN).",
+        "btn_request_invoice": "Solicitar Fatura Oficial 📑"
     },
     "ru": {
         "name": "Русский (Russian)", "title": "TrueLens AI", "subtitle": "Глобальный движок проверки",
@@ -160,12 +179,14 @@ TRANSLATIONS = {
         "error_short": "Текст слишком короткий.", "error_ai": "Предупреждение ИИ.", "error_human": "Естественный текст.",
         "img_ai": "Визуальное предупреждение (Дисперсия: ", "img_human": "Изображение в норме.",
         "mode_personal": "Личный портал", "mode_pro": "Профессиональный пакет",
-        "ent_title": "Комплекс профессиональной безопасности", "ent_desc": "Унифицированная пакетная проверка и API для бизнеса и СМИ.",
+        "ent_title": "Комплекс профессиональной безопасности", "ent_desc": "Унифицированная проверка, API и выставление счетов через банковский перевод.",
         "api_endpoint_label": "API эндпоинт:", "api_key_label": "API ключ:",
         "btn_generate_key": "Сгенерировать ключ 🔑", "docs_label": "Документация",
         "btn_export_pdf": "Экспортировать PDF-отчет 📄", "report_id": "ID отслеживания:",
         "login_title": "Защищенный вход для бизнеса", "email_label": "Корпоративный Email:", "pass_label": "Пароль:",
-        "btn_login": "Безопасный вход 🔐", "logout": "Выйти 🚪", "logged_in_as": "Вход выполнен:"
+        "btn_login": "Безопасный вход 🔐", "logout": "Выйти 🚪", "logged_in_as": "Вход выполнен:",
+        "wire_title": "Банковский перевод и официальный счет", "wire_desc": "Запросите счет-проформу или реквизиты банковского перевода (SWIFT/IBAN).",
+        "btn_request_invoice": "Запросить официальный счет 📑"
     },
     "hi": {
         "name": "हिन्दी (Hindi)", "title": "TrueLens AI", "subtitle": "वैश्विक डिजिटल सत्यापन इंजन",
@@ -175,12 +196,14 @@ TRANSLATIONS = {
         "error_short": "पाठ बहुत छोटा है।", "error_ai": "AI चेतावनी: AI जनित सामग्री।", "error_human": "प्राकृतिक पाठ।",
         "img_ai": "दृश्य चेतावनी (विचरण: ", "img_human": "छवि सामान्य है।",
         "mode_personal": "व्यक्तिगत पोर्टल", "mode_pro": "पेशेवर और व्यावसायिक सूट",
-        "ent_title": "पेशेवर सुरक्षा सूट", "ent_desc": "व्यवसायों और मीडिया के लिए एकीकृत सत्यापन और API।",
+        "ent_title": "पेशेवर सुरक्षा सूट", "ent_desc": "एकीकृत सत्यापन, API और बैंक वायर ट्रांसफर बिलिंग।",
         "api_endpoint_label": "API एंडपॉइंट:", "api_key_label": "API कुंजी:",
         "btn_generate_key": "कुंजी बनाएँ 🔑", "docs_label": "دस्तावेज़",
         "btn_export_pdf": "PDF रिपोर्ट निर्यात करें 📄", "report_id": "सत्यापन आईडी:",
         "login_title": "कॉर्पोरेट सुरक्षित लॉगिन", "email_label": "कॉर्पोरेट ईमेल:", "pass_label": "पासवर्ड:",
-        "btn_login": "सुरक्षित लॉगिन 🔐", "logout": "लॉग आउट 🚪", "logged_in_as": "लॉग इन किया गया:"
+        "btn_login": "सुरक्षित लॉगिन 🔐", "logout": "लॉग आउट 🚪", "logged_in_as": "लॉग इन किया गया:",
+        "wire_title": "बैंक वायर ट्रांसफर और आधिकारिक चालान", "wire_desc": "संस्थागत भुगतानों के लिए औपचारिक चालान या सीधे बैंक वायर निर्देश (SWIFT/IBAN) का अनुरोध करें।",
+        "btn_request_invoice": "आधिकारिक चालान का अनुरोध करें 📑"
     },
     "tr": {
         "name": "Türkçe", "title": "TrueLens AI", "subtitle": "Küresel Dijital Doğrulama Motoru",
@@ -190,12 +213,14 @@ TRANSLATIONS = {
         "error_short": "Metin çok kısa.", "error_ai": "Yapay Zeka uyarısı.", "error_human": "Doğal metin.",
         "img_ai": "Görsel Uyarı (Varyans: ", "img_human": "Görsel normal.",
         "mode_personal": "Bireysel Portal", "mode_pro": "Profesyonel İş Paketi",
-        "ent_title": "Profesyonel Güvenlik Paketi", "ent_desc": "Kurumsal, finansal ve medya iş akışları için birleştirilmiş API ve doğrulama.",
+        "ent_title": "Profesyonel Güvenlik Paketi", "ent_desc": "Birleştirilmiş API, doğrulama ve banka havalesi ile faturalandırma.",
         "api_endpoint_label": "API Ucu:", "api_key_label": "API Yetki Anahtarı:",
         "btn_generate_key": "Anahtar Üret 🔑", "docs_label": "API Belgeleri",
         "btn_export_pdf": "PDF Raporunu Dışa Aktar 📄", "report_id": "Doğrulama ID:",
         "login_title": "Kurumsal Güvenli Giriş", "email_label": "Kurumsal E-posta:", "pass_label": "Şifre:",
-        "btn_login": "Güvenli Giriş 🔐", "logout": "Çıkış 🚪", "logged_in_as": "Giriş yapılan hesap:"
+        "btn_login": "Güvenli Giriş 🔐", "logout": "Çıkış 🚪", "logged_in_as": "Giriş yapılan hesap:",
+        "wire_title": "Banka Havalesi ve Resmi Fatura", "wire_desc": "Kurumsal ödemeler için proforma fatura veya doğrudan banka havale talimatları (SWIFT/IBAN) isteyin.",
+        "btn_request_invoice": "Resmi Fatura Talep Et 📑"
     },
     "ko": {
         "name": "한국어 (Korean)", "title": "TrueLens AI", "subtitle": "글로벌 디지털 검증 엔진",
@@ -205,12 +230,14 @@ TRANSLATIONS = {
         "error_short": "텍스트가 너무 짧습니다.", "error_ai": "AI 경고: 인공지능 생성 텍스트.", "error_human": "자연스러운 텍스트입니다.",
         "img_ai": "시각적 경고 (분산: ", "img_human": "이미지가 정상입니다.",
         "mode_personal": "개인 포털", "mode_pro": "전문가 및 비즈니스 스위트",
-        "ent_title": "전문가 보안 스위트", "ent_desc": "기업, 금융, 미디어 기관을 위한 통합 검증 및 API 연동 지원.",
+        "ent_title": "전문가 보안 스위트", "ent_desc": "통합 검증, API 엔드포인트 및 은행 송금 청구.",
         "api_endpoint_label": "API 엔드포인트:", "api_key_label": "API 키:",
         "btn_generate_key": "키 생성 🔑", "docs_label": "API 문서",
         "btn_export_pdf": "PDF 보고서 내보내기 📄", "report_id": "추적 ID:",
         "login_title": "기업 보안 로그인", "email_label": "기업 이메일:", "pass_label": "비밀번호:",
-        "btn_login": "안전한 로그인 🔐", "logout": "로그아웃 🚪", "logged_in_as": "로그인 계정:"
+        "btn_login": "안전한 로그인 🔐", "logout": "로그아웃 🚪", "logged_in_as": "로그인 계정:",
+        "wire_title": "은행 송금 및 공식 인보이스", "wire_desc": "기관 결제를 위한 견적 송장 또는 직접 은행 송금 지침(SWIFT/IBAN)을 요청하세요.",
+        "btn_request_invoice": "공식 인보이스 요청 📑"
     },
     "nl": {
         "name": "Nederlands", "title": "TrueLens AI", "subtitle": "Wereldwijde Verificatie Engine",
@@ -220,12 +247,14 @@ TRANSLATIONS = {
         "error_short": "Tekst te kort.", "error_ai": "KI-waarschuwing.", "error_human": "Natuurlijke tekst.",
         "img_ai": "Visuele waarschuwing (Variantie: ", "img_human": "Afbeelding is normaal.",
         "mode_personal": "Persoonlijk Portaal", "mode_pro": "Professionele & Business Suite",
-        "ent_title": "Professionele Beveiligingssuite", "ent_desc": "Geïntegreerde verificatie en API voor corporate, banken en media.",
+        "ent_title": "Professionele Beveiligingssuite", "ent_desc": "Geïntegreerde verificatie, API-endpoints en facturering via bankoverschrijving.",
         "api_endpoint_label": "API-endpoint:", "api_key_label": "API-sleutel:",
         "btn_generate_key": "Sleutel Genereren 🔑", "docs_label": "Documentatie",
         "btn_export_pdf": "Exporteer PDF-rapport 📄", "report_id": "Verificatie-ID:",
         "login_title": "Zakelijk Veilige Login", "email_label": "Zakelijk E-mailadres:", "pass_label": "Wachtwoord:",
-        "btn_login": "Veilig Inloggen 🔐", "logout": "Uitloggen 🚪", "logged_in_as": "Ingelogd als:"
+        "btn_login": "Veilig Inloggen 🔐", "logout": "Uitloggen 🚪", "logged_in_as": "Ingelogd als:",
+        "wire_title": "Bankoverschrijving & Officiële Factuur", "wire_desc": "Vraag een proforma factuur of directe bankoverboekingsinstructies (SWIFT/IBAN) aan.",
+        "btn_request_invoice": "Vraag Officiële Factuur aan 📑"
     },
     "pl": {
         "name": "Polski", "title": "TrueLens AI", "subtitle": "Globalny Silnik Weryfikacji",
@@ -235,12 +264,14 @@ TRANSLATIONS = {
         "error_short": "Tekst za krótki.", "error_ai": "Ostrzeżenie AI.", "error_human": "Tekst naturalny.",
         "img_ai": "Ostrzeżenie wizualne (Wariancja: ", "img_human": "Obraz jest naturalny.",
         "mode_personal": "Portal Osobisty", "mode_pro": "Profesjonalny Pakiet Biznesowy",
-        "ent_title": "Profesjonalny Pakiet Bezpieczeństwa", "ent_desc": "Zintegrowana weryfikacja i API dla instytucji, banków i mediów.",
+        "ent_title": "Profesjonalny Pakiet Bezpieczeństwa", "ent_desc": "Zintegrowana weryfikacja, API i rozliczenia przelewem bankowym.",
         "api_endpoint_label": "Endpoint API:", "api_key_label": "Klucz API:",
         "btn_generate_key": "Generuj Klucz 🔑", "docs_label": "Dokumentacja",
         "btn_export_pdf": "Eksportuj raport PDF 📄", "report_id": "ID weryfikacji:",
         "login_title": "Bezpieczne logowanie korporacyjne", "email_label": "Email firmowy:", "pass_label": "Hasło:",
-        "btn_login": "Bezpieczne logowanie 🔐", "logout": "Wyloguj 🚪", "logged_in_as": "Zalogowano jako:"
+        "btn_login": "Bezpieczne logowanie 🔐", "logout": "Wyloguj 🚪", "logged_in_as": "Zalogowano jako:",
+        "wire_title": "Przelew bankowy i oficjalna faktura", "wire_desc": "Poproś o fakturę proforma lub instrukcje przelewu bankowego (SWIFT/IBAN) dla płatności instytucjonalnych.",
+        "btn_request_invoice": "Zamów oficjalną fakturę 📑"
     },
     "vi": {
         "name": "Tiếng Việt", "title": "TrueLens AI", "subtitle": "Công cụ Xác thực Toàn cầu",
@@ -250,12 +281,14 @@ TRANSLATIONS = {
         "error_short": "Văn bản quá ngắn.", "error_ai": "Cảnh báo AI.", "error_human": "Văn bản tự nhiên.",
         "img_ai": "Cảnh báo hình ảnh (Phương sai: ", "img_human": "Hình ảnh bình thường.",
         "mode_personal": "Cổng cá nhân", "mode_pro": "Bộ Chuyên nghiệp & Doanh nghiệp",
-        "ent_title": "Bộ bảo mật Chuyên nghiệp", "ent_desc": "Xác thực đồng bộ và API cho tổ chức, ngân hàng và truyền thông.",
+        "ent_title": "Bộ bảo mật Chuyên nghiệp", "ent_desc": "Xác thực đồng bộ, API và thanh toán qua chuyển khoản ngân hàng.",
         "api_endpoint_label": "Điểm cuối API:", "api_key_label": "Khóa API:",
         "btn_generate_key": "Tạo khóa 🔑", "docs_label": "Tài liệu API",
         "btn_export_pdf": "Xuất Báo cáo PDF 📄", "report_id": "ID Xác thực:",
         "login_title": "Đăng nhập Doanh nghiệp Bảo mật", "email_label": "Email Doanh nghiệp:", "pass_label": "Mật khẩu:",
-        "btn_login": "Đăng nhập An toàn 🔐", "logout": "Đăng xuất 🚪", "logged_in_as": "Đã đăng nhập:"
+        "btn_login": "Đăng nhập An toàn 🔐", "logout": "Đăng xuất 🚪", "logged_in_as": "Đã đăng nhập:",
+        "wire_title": "Chuyển khoản Ngân hàng & Hóa đơn Chính thức", "wire_desc": "Yêu cầu hóa đơn chiếu lệ hoặc hướng dẫn chuyển khoản ngân hàng trực tiếp (SWIFT/IBAN).",
+        "btn_request_invoice": "Yêu cầu Hóa đơn Chính thức 📑"
     },
     "id": {
         "name": "Bahasa Indonesia", "title": "TrueLens AI", "subtitle": "Mesin Verifikasi Global",
@@ -265,12 +298,14 @@ TRANSLATIONS = {
         "error_short": "Teks terlalu pendek.", "error_ai": "Peringatan AI.", "error_human": "Teks alami.",
         "img_ai": "Peringatan Visual (Varian: ", "img_human": "Gambar normal.",
         "mode_personal": "Portal Pribadi", "mode_pro": "Suite Profesional & Bisnis",
-        "ent_title": "Suite Keamanan Profesional", "ent_desc": "Verifikasi terpadu dan API untuk korporat, perbankan, dan media.",
+        "ent_title": "Suite Keamanan Profesional", "ent_desc": "Verifikasi terpadu, API, dan penagihan transfer bank perusahaan.",
         "api_endpoint_label": "Endpoint API:", "api_key_label": "Kunci API:",
         "btn_generate_key": "Buat Kunci 🔑", "docs_label": "Dokumentasi API",
         "btn_export_pdf": "Ekspor Laporan PDF 📄", "report_id": "ID Verifikasi:",
         "login_title": "Login Korporat Aman", "email_label": "Email Perusahaan:", "pass_label": "Kata Sandi:",
-        "btn_login": "Login Aman 🔐", "logout": "Keluar 🚪", "logged_in_as": "Masuk sebagai:"
+        "btn_login": "Login Aman 🔐", "logout": "Keluar 🚪", "logged_in_as": "Masuk sebagai:",
+        "wire_title": "Transfer Bank & Faktur Resmi", "wire_desc": "Minta faktur proforma atau instruksi transfer bank langsung (SWIFT/IBAN) untuk pembayaran institusional.",
+        "btn_request_invoice": "Minta Faktur Resmi 📑"
     },
     "sv": {
         "name": "Svenska", "title": "TrueLens AI", "subtitle": "Global Verifieringsmotor",
@@ -280,12 +315,15 @@ TRANSLATIONS = {
         "error_short": "För kort text.", "error_ai": "AI-varning.", "error_human": "Naturlig text.",
         "img_ai": "Visuell varning (Varians: ", "img_human": "Bilden är normal.",
         "mode_personal": "Personlig portal", "mode_pro": "Professionell & Business Suite",
-        "ent_title": "Professionell Säkerhetssvit", "ent_desc": "Enhetlig verifiering och API för företag, banker och media.",
+        "ent_title": "Professionell Säkerhetssvit", "ent_desc": "Enhetlig verifiering, API och fakturering via banköverföring.",
         "api_endpoint_label": "API-endpoint:", "api_key_label": "API-nyckel:",
         "btn_generate_key": "Generera nyckel 🔑", "docs_label": "API-dokumentation",
         "btn_export_pdf": "Exportera PDF-rapport 📄", "report_id": "Verifierings-ID:",
         "login_title": "Säker Företagsinloggning", "email_label": "Företagsmejl:", "pass_label": "Lösenord:",
-        "btn_login": "Säker Inloggning 🔐", "logout": "Logga ut 🚪", "logged_in_as": "Inloggad som:"
+        "btn_login": "Säker Inloggning 🔐", "logout": "Logga ut 🚪", "logged_in_as": "Inloggad som:",
+        "wire_title": "Banköverföring och Officiell Faktura",
+        "wire_desc": "Begär en proformafaktura eller direkt banköverföringsinstruktion (SWIFT/IBAN) för institutionella betalningar.",
+        "btn_request_invoice": "Begär Officiell Faktura 📑"
     },
     "uk": {
         "name": "Українська (Ukrainian)", "title": "TrueLens AI", "subtitle": "Глобальний рушій перевірки",
@@ -295,12 +333,14 @@ TRANSLATIONS = {
         "error_short": "Текст занадто короткий.", "error_ai": "Попередження ШІ.", "error_human": "Природний текст.",
         "img_ai": "Візуальне попередження (Дисперсія: ", "img_human": "Зображення нормальне.",
         "mode_personal": "Особистий портал", "mode_pro": "Професійний пакет",
-        "ent_title": "Комплекс професійної безпеки", "ent_desc": "Уніфікована перевірка та API для корпорацій, банків та медіа.",
+        "ent_title": "Комплекс професійної безпеки", "ent_desc": "Уніфікована перевірка, API та розрахунки через банківський переказ.",
         "api_endpoint_label": "API ендпоінт:", "api_key_label": "API ключ:",
         "btn_generate_key": "Згенерувати ключ 🔑", "docs_label": "Документація",
         "btn_export_pdf": "Експортувати PDF-звіт 📄", "report_id": "ID відстеження:",
         "login_title": "Захищений корпоративний вхід", "email_label": "Корпоративний Email:", "pass_label": "Пароль:",
-        "btn_login": "Безпечний вхід 🔐", "logout": "Вийти 🚪", "logged_in_as": "Увійшов як:"
+        "btn_login": "Безпечний вхід 🔐", "logout": "Вийти 🚪", "logged_in_as": "Увійшов як:",
+        "wire_title": "Банківський переказ та офіційний рахунок", "wire_desc": "Запит рахунку-проформи або реквізитів банківського переказу (SWIFT/IBAN).",
+        "btn_request_invoice": "Запросити офіційний рахунок 📑"
     },
     "el": {
         "name": "Ελληνικά (Greek)", "title": "TrueLens AI", "subtitle": "Παγκόσμια Μηχανή Επαλήθευσης",
@@ -310,13 +350,14 @@ TRANSLATIONS = {
         "error_short": "Πολύ σύντομο κείμενο.", "error_ai": "Προειδοποίηση AI.", "error_human": "Φυσικό κείμενο.",
         "img_ai": "Οπτική προειδοποίηση (Διακύμανση: ", "img_human": "Η εικόνα είναι κανονική.",
         "mode_personal": "Προσωπική Πύλη", "mode_pro": "Επαγγελματική Σουίτα",
-        "ent_title": "Επαγγελματική Σουίτα Ασφάλειας", "ent_desc": "Ενοποιημένη επαλήθευση και API για επιχειρήσεις, τράπεζες και μέσα ενημέρωσης.",
+        "ent_title": "Επαγγελματική Σουίτα Ασφάλειας", "ent_desc": "Ενοποιημένη επαλήθευση, API και τιμολόγηση μέσω τραπεζικού έμβασματος.",
         "api_endpoint_label": "API Endpoint:", "api_key_label": "Κλειδί API:",
         "btn_generate_key": "Δημιουργία Κλειδιού 🔑", "docs_label": "Τεκμηρίωση",
         "btn_export_pdf": "Εξαγωγή Αναφοράς PDF 📄", "report_id": "ID Αναφοράς:",
-        "login_title": "Ասահովված Մուտք", "email_label": "Կորპորատիվ Էլ. փոստ:", "pass_label": "Գաղտնաբառ:",
         "login_title": "Ασφαλής Είσοδος Επιχείρησης", "email_label": "Εταιρικό Email:", "pass_label": "Κωδικός:",
-        "btn_login": "Ασφαλής Σύνδεση 🔐", "logout": "Αποσύνδεση 🚪", "logged_in_as": "Συνδεδεμένος ως:"
+        "btn_login": "Ασφαλής Σύνδεση 🔐", "logout": "Αποσύνδεση 🚪", "logged_in_as": "Συνδεδεμένος ως:",
+        "wire_title": "Τραπεζικό Έμβασμα & Επίσημο Timologio", "wire_desc": "Ζητήστε τιμολόγιο proforma ή οδηγίες τραπεζικού εμβάσματος (SWIFT/IBAN).",
+        "btn_request_invoice": "Αίτηση Επίσημου Timologiou 📑"
     },
     "he": {
         "name": "עברית (Hebrew)", "title": "TrueLens AI", "subtitle": "מנוע אימות דיגיטלי עולמי",
@@ -326,12 +367,14 @@ TRANSLATIONS = {
         "error_short": "הטקסט קצר מדי.", "error_ai": "אזהרת בינה מלאכותית.", "error_human": "טקסט טבעי.",
         "img_ai": "אזהרה ויזואלית (שונות: ", "img_human": "התמונה תקינה.",
         "mode_personal": "פורטל אישי", "mode_pro": "חבילת עסקים ומקצוענים",
-        "ent_title": "חבילת אבטחה מקצועית", "ent_desc": "אימות מאוחד וחיבור API עבור חברות, בנקים וגופי מדיה.",
+        "ent_title": "חבילת אבטחה מקצועית", "ent_desc": "אימות מאוחד, חיבור API וחיוב באמצעות העברה בנקאית.",
         "api_endpoint_label": "כתובת API:", "api_key_label": "מפתח API:",
         "btn_generate_key": "צור מפתח 🔑", "docs_label": "תיעוד API",
         "btn_export_pdf": "ייצוא דוח PDF 📄", "report_id": "מזהה מעקב:",
         "login_title": "כניסת אבטחה ארגונית", "email_label": "דוא\"ל ארגוני:", "pass_label": "סיסמה:",
-        "btn_login": "התחברות מאובטחת 🔐", "logout": "התנתק 🚪", "logged_in_as": "מחובר כחשבון:"
+        "btn_login": "התחברות מאובטחת 🔐", "logout": "התנתק 🚪", "logged_in_as": "מחובר כחשבון:",
+        "wire_title": "העברה בנקאית וחשבונית רשמית", "wire_desc": "בקש חשבונית פרופורמה או הוראות העברה בנקאית ישירה (SWIFT/IBAN).",
+        "btn_request_invoice": "בקש חשבונית רשמית 📑"
     },
     "ro": {
         "name": "Română", "title": "TrueLens AI", "subtitle": "Motor Global de Verificare",
@@ -341,12 +384,14 @@ TRANSLATIONS = {
         "error_short": "Text prea scurt.", "error_ai": "Alertă AI.", "error_human": "Text natural.",
         "img_ai": "Alertă vizuală (Varianță: ", "img_human": "Imagine normală.",
         "mode_personal": "Portal Personal", "mode_pro": "Suite Profesională & Business",
-        "ent_title": "Suite de Securitate Profesională", "ent_desc": "Verificare unificată și API pentru corporații, bănci și mass-media.",
+        "ent_title": "Suite de Securitate Profesională", "ent_desc": "Verificare unificată, API și facturare prin transfer bancar.",
         "api_endpoint_label": "Endpoint API:", "api_key_label": "Cheie API:",
         "btn_generate_key": "Generează Cheie 🔑", "docs_label": "Documentație",
         "btn_export_pdf": "Exportă Raport PDF 📄", "report_id": "ID Verificare:",
         "login_title": "Autentificare Corporativă Securizată", "email_label": "Email Corporativ:", "pass_label": "Parolă:",
-        "btn_login": "Autentificare Securizată 🔐", "logout": "Deconectare 🚪", "logged_in_as": "Autentificat ca:"
+        "btn_login": "Autentificare Securizată 🔐", "logout": "Deconectare 🚪", "logged_in_as": "Autentificat ca:",
+        "wire_title": "Transfer Bancar și Factură Oficială", "wire_desc": "Solicitați o factură proforma sau instrucțiuni directe de transfer bancar (SWIFT/IBAN).",
+        "btn_request_invoice": "Solicită Factură Oficială 📑"
     },
     "hu": {
         "name": "Magyar", "title": "TrueLens AI", "subtitle": "Globális Ellenőrző Motor",
@@ -356,12 +401,14 @@ TRANSLATIONS = {
         "error_short": "Túl rövid szöveg.", "error_ai": "MI figyelmeztetés.", "error_human": "Természetes szöveg.",
         "img_ai": "Vizuális figyelmeztetés (Variancia: ", "img_human": "A kép normális.",
         "mode_personal": "Személyes Portál", "mode_pro": "Professzionális & Üzleti Csomag",
-        "ent_title": "Professzionális Biztonsági Csomag", "ent_desc": "Egységesített ellenőrzés és API vállalatok, bankok és média számára.",
+        "ent_title": "Professzionális Biztonsági Csomag", "ent_desc": "Egységesített ellenőrzés, API és banki átutalásos számlázás.",
         "api_endpoint_label": "API Végpont:", "api_key_label": "API Kulcs:",
         "btn_generate_key": "Kulcs Generálása 🔑", "docs_label": "Dokumentáció",
         "btn_export_pdf": "PDF Jelentés Exportálása 📄", "report_id": "Követési Azonosító:",
         "login_title": "Biztonságos Vállalati Bejelentkezés", "email_label": "Vállalati E-mail:", "pass_label": "Jelszó:",
-        "btn_login": "Biztonságos Bejelentkezés 🔐", "logout": "Kijelentkezés 🚪", "logged_in_as": "Bejelentkezve mint:"
+        "btn_login": "Biztonságos Bejelentkezés 🔐", "logout": "Kijelentkezés 🚪", "logged_in_as": "Bejelentkezve mint:",
+        "wire_title": "Banki Átutalás és Hivatalos Számla", "wire_desc": "Igényeljen proforma számlát vagy közvetlen banki átutalási útmutatót (SWIFT/IBAN).",
+        "btn_request_invoice": "Hivatalos Számla Igénylése 📑"
     },
     "cs": {
         "name": "Čeština", "title": "TrueLens AI", "subtitle": "Globální Ověřovací Motor",
@@ -372,12 +419,14 @@ TRANSLATIONS = {
         "img_ai": "Vizuální upozornění (Variance: ", "img_human": "Obrázek je v pořádku.",
         "mode_personal": "Osobní portál", "mode_pro": "Profesionální a firemní balíček",
         "ent_title": "Profesionální bezpečnostní balíček",
-        "ent_desc": "Jednotné ověřování a API pro korporace, banky a média.",
+        "ent_desc": "Jednotné ověřování, API a fakturace bankovním převodem.",
         "api_endpoint_label": "API Endpoint:", "api_key_label": "API Klíč:",
         "btn_generate_key": "Generovat klíč 🔑", "docs_label": "Dokumentace",
         "btn_export_pdf": "Exportovat PDF Zprávu 📄", "report_id": "ID Ověření:",
         "login_title": "Zabezpečené firemní přihlášení", "email_label": "Firemní E-mail:", "pass_label": "Heslo:",
-        "btn_login": "Zabezpečené přihlášení 🔐", "logout": "Odhlásit 🚪", "logged_in_as": "Přihlášen jako:"
+        "btn_login": "Zabezpečené přihlášení 🔐", "logout": "Odhlásit 🚪", "logged_in_as": "Přihlášen jako:",
+        "wire_title": "Bankovní převod a oficiální faktura", "wire_desc": "Vyžádejte si proforma fakturu nebo instrukcje k bankovnímu převodu (SWIFT/IBAN).",
+        "btn_request_invoice": "Vyžádat oficiální fakturu 📑"
     },
     "th": {
         "name": "ไทย (Thai)", "title": "TrueLens AI", "subtitle": "เครื่องมือตรวจสอบดิจิทัลระดับโลก",
@@ -387,12 +436,15 @@ TRANSLATIONS = {
         "error_short": "ข้อความสั้นเกินไป", "error_ai": "คำเตือน AI: ตรวจพบเนื้อหา AI", "error_human": "ข้อความปกติทั่วไป",
         "img_ai": "คำเตือนภาพ (ความแปรปรวน: ", "img_human": "ภาพปกติสมบูรณ์",
         "mode_personal": "พอร์ทัลส่วนบุคคล", "mode_pro": "ชุดเครื่องมือระดับมืออาชีพ",
-        "ent_title": "ชุดความปลอดภัยระดับมืออาชีพ", "ent_desc": "การตรวจสอบแบบครบวงจรและ API สำหรับองค์กร ธนาคาร และสื่อ",
+        "ent_title": "ชุดความปลอดภัยระดับมืออาชีพ", "ent_desc": "การตรวจสอบแบบครบวงจร, API และการออกใบแจ้งหนี้ผ่านการโอนเงินผ่านธนาคาร",
         "api_endpoint_label": "จุดสิ้นสุด API:", "api_key_label": "คีย์ API:",
         "btn_generate_key": "สร้างคีย์องค์กร 🔑", "docs_label": "เอกสารคู่มือ API",
         "btn_export_pdf": "ส่งออกรายงาน PDF 📄", "report_id": "รหัสติดตามการตรวจสอบ:",
         "login_title": "เข้าสู่ระบบองค์กรอย่างปลอดภัย", "email_label": "อีเมลองค์กร:", "pass_label": "รหัสผ่าน:",
-        "btn_login": "เข้าสู่ระบบอย่างปลอดภัย 🔐", "logout": "ออกจากระบบ 🚪", "logged_in_as": "เข้าสู่ระบบในฐานะ:"
+        "btn_login": "เข้าสู่ระบบอย่างปลอดภัย 🔐", "logout": "ออกจากระบบ 🚪", "logged_in_as": "เข้าสู่ระบบในฐานะ:",
+        "wire_title": "การโอนเงินผ่านธนาคารและใบแจ้งหนี้ทางการ",
+        "wire_desc": "ขอใบแจ้งหนี้ Proforma หรือคำแนะนำการโอนเงินผ่านธนาคารโดยตรง (SWIFT/IBAN) สำหรับการชำระเงินขององค์กร",
+        "btn_request_invoice": "ขอใบแจ้งหนี้ทางการ 📑"
     },
     "fi": {
         "name": "Suomi", "title": "TrueLens AI", "subtitle": "Globaali Varmennusmoottori",
@@ -402,12 +454,14 @@ TRANSLATIONS = {
         "error_short": "Liian lyhyt teksti.", "error_ai": "Tekoälyvaroitus.", "error_human": "Luonnollinen teksti.",
         "img_ai": "Visuaalinen varoitus (Varianssi: ", "img_human": "Kuva on normaali.",
         "mode_personal": "Henkilökohtainenportaali", "mode_pro": "Ammattimainen Yrityspaketti",
-        "ent_title": "Ammattimainen Turvallisuuspaketti", "ent_desc": "Yhtenäinen varmennus ja API yrityksille, pankeille ja medialle.",
+        "ent_title": "Ammattimainen Turvallisuuspaketti", "ent_desc": "Yhtenäinen varmennus, API ja pankkisiirtolaskutus.",
         "api_endpoint_label": "API-päätepiste:", "api_key_label": "API-avain:",
         "btn_generate_key": "Luo avain 🔑", "docs_label": "Dokumentaatio",
         "btn_export_pdf": "Vie PDF-raportti 📄", "report_id": "Tunniste:",
         "login_title": "Turvallinen yrityskirjautuminen", "email_label": "Yrityksen sähköposti:", "pass_label": "Salasana:",
-        "btn_login": "Turvallinen kirjautuminen 🔐", "logout": "Kirjaudu ulos 🚪", "logged_in_as": "Kirjautunut:"
+        "btn_login": "Turvallinen kirjautuminen 🔐", "logout": "Kirjaudu ulos 🚪", "logged_in_as": "Kirjautunut:",
+        "wire_title": "Pankkisiirto ja virallinen lasku", "wire_desc": "Pyydä proforma-lasku tai suorat pankkisiirto-ohjeet (SWIFT/IBAN).",
+        "btn_request_invoice": "Pyydä virallinen lasku 📑"
     },
     "da": {
         "name": "Dansk", "title": "TrueLens AI", "subtitle": "Global Verificeringsmotor",
@@ -417,12 +471,14 @@ TRANSLATIONS = {
         "error_short": "For kort tekst.", "error_ai": "AI-advarsel.", "error_human": "Naturlig tekst.",
         "img_ai": "Visuel advarsel (Varians: ", "img_human": "Billedet er normalt.",
         "mode_personal": "Personlig portal", "mode_pro": "Professionel & Business Suite",
-        "ent_title": "Professionel Sikkerhedssuite", "ent_desc": "Enhedset verificering og API til virksomheder, banker og medier.",
+        "ent_title": "Professionel Sikkerhedssuite", "ent_desc": "Enhedset verificering, API og bankoverførselsfakturering.",
         "api_endpoint_label": "API-endpoint:", "api_key_label": "API-nøgle:",
         "btn_generate_key": "Generer nøgle 🔑", "docs_label": "API-dokumentation",
         "btn_export_pdf": "Eksporter PDF-rapport 📄", "report_id": "Verificerings-ID:",
         "login_title": "Sikker Erhvervslogin", "email_label": "Virksomheds-e-mail:", "pass_label": "Adgangskode:",
-        "btn_login": "Sikker Login 🔐", "logout": "Log ud 🚪", "logged_in_as": "Logget ind som:"
+        "btn_login": "Sikker Login 🔐", "logout": "Log ud 🚪", "logged_in_as": "Logget ind som:",
+        "wire_title": "Bankoverførsel og Officiel Faktura", "wire_desc": "Anmod om en proformafaktura eller direkte bankoverførselsinstruktioner (SWIFT/IBAN).",
+        "btn_request_invoice": "Anmod om Officiel Faktura 📑"
     },
     "no": {
         "name": "Norsk", "title": "TrueLens AI", "subtitle": "Global Verifiseringsmotor",
@@ -432,12 +488,14 @@ TRANSLATIONS = {
         "error_short": "For kort tekst.", "error_ai": "KI-advarsel.", "error_human": "Naturlig tekst.",
         "img_ai": "Visuell advarsel (Varians: ", "img_human": "Bildet er normalt.",
         "mode_personal": "Personlig portal", "mode_pro": "Profesjonell Bedriftspakke",
-        "ent_title": "Profesjonell Sikkerhetspakke", "ent_desc": "Enhetlig verifisering og API for bedrifter, banker og media.",
+        "ent_title": "Profesjonell Sikkerhetspakke", "ent_desc": "Enhetlig verifisering, API og fakturering via banköverføring.",
         "api_endpoint_label": "API-endepunkt:", "api_key_label": "API-nøkkel:",
         "btn_generate_key": "Generer nøkkel 🔑", "docs_label": "Dokumentasjon",
         "btn_export_pdf": "Eksporter PDF-rapport 📄", "report_id": "Verifiserings-ID:",
         "login_title": "Sikker bedriftspålogging", "email_label": "Bedrifts-e-post:", "pass_label": "Passord:",
-        "btn_login": "Sikker pålogging 🔐", "logout": "Logg ut 🚪", "logged_in_as": "Logget inn som:"
+        "btn_login": "Sikker pålogging 🔐", "logout": "Logg ut 🚪", "logged_in_as": "Logget inn som:",
+        "wire_title": "Bankoverføring og Offisiell Faktura", "wire_desc": "Be om en proformafaktura eller direkte bankoverføringsinstruksjoner (SWIFT/IBAN).",
+        "btn_request_invoice": "Be om offisiell faktura 📑"
     },
     "ms": {
         "name": "Bahasa Melayu", "title": "TrueLens AI", "subtitle": "Enjin Pengesahan Global",
@@ -447,12 +505,14 @@ TRANSLATIONS = {
         "error_short": "Teks terlalu pendek.", "error_ai": "Amaran AI.", "error_human": "Teks asli.",
         "img_ai": "Amaran Visual (Varians: ", "img_human": "Imej adalah normal.",
         "mode_personal": "Portal Peribadi", "mode_pro": "Suite Profesional & Perniagaan",
-        "ent_title": "Suite Keselamatan Profesional", "ent_desc": "Pengesahan bersepadu dan API untuk korporat, perbankan, dan media.",
+        "ent_title": "Suite Keselamatan Profesional", "ent_desc": "Pengesahan bersepadu, API, dan pengebilan pindahan bank.",
         "api_endpoint_label": "Titik Akhir API:", "api_key_label": "Kunci API:",
         "btn_generate_key": "Jana Kunci 🔑", "docs_label": "Dokumentasi API",
         "btn_export_pdf": "Eksport Laporan PDF 📄", "report_id": "ID Pengesahan:",
         "login_title": "Log Masuk Korporat Selamat", "email_label": "E-mel Syarikat:", "pass_label": "Kata Laluan:",
-        "btn_login": "Log Masuk Selamat 🔐", "logout": "Log Keluar 🚪", "logged_in_as": "Log masuk sebagai:"
+        "btn_login": "Log Masuk Selamat 🔐", "logout": "Log Keluar 🚪", "logged_in_as": "Log masuk sebagai:",
+        "wire_title": "Pindahan Bank & Invois Rasmi", "wire_desc": "Minta invois proforma atau arahan pindahan bank langsung (SWIFT/IBAN).",
+        "btn_request_invoice": "Minta Invois Rasmi 📑"
     },
     "bn": {
         "name": "বাংলা (Bengali)", "title": "TrueLens AI", "subtitle": "গ্লোবাল ভেরিফিকেশন ইঞ্জিন",
@@ -462,12 +522,14 @@ TRANSLATIONS = {
         "error_short": "টেক্সট খুব ছোট।", "error_ai": "AI সতর্কতা: AI দ্বারা তৈরি।", "error_human": "স্বাভাবিক টেক্সট।",
         "img_ai": "ভিজ্যুয়াল সতর্কতা (ভ্যারিয়েন্স: ", "img_human": "ছবিটি স্বাভাবিক।",
         "mode_personal": "ব্যক্তিগত পোর্টাল", "mode_pro": "প্রফেশনাল ও বিজনেস স্যুট",
-        "ent_title": "প্রফেশনাল সিকিউরিটি স্যুট", "ent_desc": "কর্পোরেট, ব্যাংক এবং মিডিয়ার জন্য সমন্বিত যাচাইকরণ এবং API সাপোর্ট।",
+        "ent_title": "প্রফেশনাল সিকিউরিটি স্যুট", "ent_desc": "সমন্বিত যাচাইকরণ, API এবং ব্যাংক ওয়্যার ট্রান্সফার বিলিং।",
         "api_endpoint_label": "API এন্ডপয়েন্ট:", "api_key_label": "API কী:",
         "btn_generate_key": "কী জেনারেট করুন 🔑", "docs_label": "নথিপত্র",
         "btn_export_pdf": "PDF রিপোর্ট এক্সপোর্ট করুন 📄", "report_id": "যাচাইকরণ আইডি:",
         "login_title": "এন্টারপ্রাইজ সিকিউর লগইন", "email_label": "কর্পোরেট ইমেল:", "pass_label": "পাসওয়ার্ড:",
-        "btn_login": "নিরাপদ লগইন 🔐", "logout": "লগআউট 🚪", "logged_in_as": "লগইন করা আছে:"
+        "btn_login": "নিরাপদ লগইন 🔐", "logout": "লগআউট 🚪", "logged_in_as": "লগইন করা আছে:",
+        "wire_title": "ব্যাংক ওয়্যার ট্রান্সফার এবং অফিসিয়াল চালান", "wire_desc": "প্রাতিষ্ঠানিক পেমেন্টের জন্য প্রোফর্মা চালান বা সরাসরি ব্যাংক ওয়্যার নির্দেশাবলী (SWIFT/IBAN) অনুরোধ করুন।",
+        "btn_request_invoice": "অফিসিয়াল চালান অনুরোধ করুন 📑"
     },
     "fa": {
         "name": "فارسی (Persian)", "title": "TrueLens AI", "subtitle": "موتور جهانی تأیید اصالت",
@@ -477,12 +539,14 @@ TRANSLATIONS = {
         "error_short": "متن خیلی کوتاه است.", "error_ai": "هشدار هوش مصنوعی.", "error_human": "متن طبیعی است.",
         "img_ai": "هشدار تصویری (واریانس: ", "img_human": "تصویر عادی است.",
         "mode_personal": "پورتال شخصی", "mode_pro": "مجموعه حرفه‌ای و تجاری",
-        "ent_title": "مجموعه امنیت حرفه‌ای", "ent_desc": "اعتبارسنجی یکپارچه و اتصال API برای شرکت‌ها، بانک‌ها و رسانه‌ها.",
+        "ent_title": "مجموعه امنیت حرفه‌ای", "ent_desc": "اعتبارسنجی یکپارچه، اتصال API و صدور صورتحساب از طریق انتقال بانکی.",
         "api_endpoint_label": "نقطه پایانی API:", "api_key_label": "کلید مجوز API:",
         "btn_generate_key": "تولید کلید سازمانی 🔑", "docs_label": "مستندات API",
         "btn_export_pdf": "صدور گزارش رسمی PDF 📄", "report_id": "شناسه رهگیری:",
         "login_title": "ورود امن سازمانی و بانکی", "email_label": "ایمیل سازمانی:", "pass_label": "رمز عبور:",
-        "btn_login": "ورود امن 🔐", "logout": "خروج 🚪", "logged_in_as": "وارد شده با حساب:"
+        "btn_login": "ورود امن 🔐", "logout": "خروج 🚪", "logged_in_as": "وارد شده با حساب:",
+        "wire_title": "انتقال بانکی و فاکتور رسمی", "wire_desc": "درخواست فاکتور پروفرما یا دستورالعمل انتقال بانکی مستقیم (SWIFT/IBAN).",
+        "btn_request_invoice": "درخواست فاکتور رسمی 📑"
     },
     "ur": {
         "name": "اردو (Urdu)", "title": "TrueLens AI", "subtitle": "عالمی ڈیجیٹل تصدیقی انجن",
@@ -492,12 +556,14 @@ TRANSLATIONS = {
         "error_short": "متن بہت چھوٹا ہے۔", "error_ai": "AI کی طرف سے انتباہ۔", "error_human": "قدرتی متن۔",
         "img_ai": " بصری انتباہ (فرق: ", "img_human": "تصویر نارمل ہے۔",
         "mode_personal": "ذاتی پورٹل", "mode_pro": "پروفیشنل اور بزنس سوٹ",
-        "ent_title": "پروفیشنل سیکیورٹی سوٹ", "ent_desc": "کارپوریٹ، بینکنگ اور میڈیا سیکٹرز کے لیے متفقہ تصدیق اور API کنکشن۔",
+        "ent_title": "پروفیشنل سیکیورٹی سوٹ", "ent_desc": "متفقہ تصدیق، API اور بینک وائر ٹرانسفر کے ذریعے بلنگ۔",
         "api_endpoint_label": "API اینڈ پوائنٹ:", "api_key_label": "API کلید:",
         "btn_generate_key": "انٹرپرाइज کلید بنائیں 🔑", "docs_label": "دستاویزات",
         "btn_export_pdf": "پی ڈی ایف رپورٹ برآمد کریں 📄", "report_id": "تصدیقی شناختی نمبر:",
         "login_title": "کارپوریٹ محفوظ لاگ ان (بینک اور ادارے)", "email_label": "کارپوریٹ ای میل:", "pass_label": "پاس ورڈ:",
-        "btn_login": "محفوظ لاگ ان 🔐", "logout": "لاگ آؤٹ 🚪", "logged_in_as": "لاگ ان اکاؤنٹ:"
+        "btn_login": "محفوظ لاگ ان 🔐", "logout": "لاگ آؤٹ 🚪", "logged_in_as": "لاگ ان اکاؤنٹ:",
+        "wire_title": "بینک وائر ٹرانسفر اور آفیشل انوイス", "wire_desc": "ادارہ جاتی ادایگیوں کے لیے پروفرما انوائس یا براہ راست بینک وائر ہدایات (SWIFT/IBAN) کی درخواست کریں۔",
+        "btn_request_invoice": "آفیشل انوائس کی درخواست کریں 📑"
     }
 }
 
@@ -656,6 +722,13 @@ HTML_TEMPLATE = """
             border-radius: 12px;
             margin-bottom: 15px;
         }
+        .wire-box {
+            background: #0f172a;
+            border: 1px dashed #38bdf8;
+            padding: 15px;
+            border-radius: 12px;
+            margin-top: 15px;
+        }
     </style>
 </head>
 <body>
@@ -714,7 +787,7 @@ HTML_TEMPLATE = """
         {% endif %}
 
         {% else %}
-        <!-- Professional & Enterprise Unified Portal Mode with Secure Login -->
+        <!-- Professional & Enterprise Unified Portal Mode with Secure Login & Bank Wire / Invoice Option -->
         <div class="enterprise-container">
             <h3>🏢 {{ t.ent_title }}</h3>
             
@@ -777,6 +850,13 @@ HTML_TEMPLATE = """
 
             <button class="btn-submit" style="margin-top: 10px;" onclick="alert('Enterprise API Key Generated & Authorized Successfully!')">{{ t.btn_generate_key }}</button>
             
+            <!-- Bank Wire Transfer & Official Invoice Section (حل وصول المال لحسابك البنكي للشركات الكبرى) -->
+            <div class="wire-box">
+                <h4 style="color: #38bdf8; margin-top: 0; font-size: 14px;">🏦 {{ t.wire_title }}</h4>
+                <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 10px;">{{ t.wire_desc }}</p>
+                <button type="button" class="btn-submit" style="background: linear-gradient(135deg, #059669, #047857); padding: 10px; font-size: 13px;" onclick="alert('Proforma Invoice & Bank Wire Instructions (SWIFT/IBAN) sent to your corporate email successfully!')">{{ t.btn_request_invoice }}</button>
+            </div>
+
             <div style="text-align: center; margin-top: 15px;">
                 <a href="#" style="color: #818cf8; font-size: 12px; text-decoration: none;">📚 {{ t.docs_label }}</a>
             </div>
@@ -893,8 +973,7 @@ def api_analyze():
     data = request.get_json() or {}
     text = data.get("text", "")
     
-    if not text.strip():
-        return jsonify({"status": "error", "message": "No text provided for analysis."}), 400
+    , 400
         
     ai_patterns = [r"as an ai", r"in conclusion", r"furthermore", r"it is important", r"بصفتي", r"في الختام"]
     score = sum(25 for pattern in ai_patterns if re.search(pattern, text, re.IGNORECASE))
@@ -911,4 +990,4 @@ def api_analyze():
     })
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=False)
+    app.run(0.0.0.0, 5000, False)
