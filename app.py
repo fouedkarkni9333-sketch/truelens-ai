@@ -49,7 +49,7 @@ TRANSLATIONS = {
         "login_title": "تسجيل الدخول الآمن للمؤسسات والبنوك", "email_label": "البريد الإلكتروني المؤسسي:", "pass_label": "كلمة المرور:",
         "btn_login": "تسجيل دخول آمن 🔐", "logout": "تسجيل خروج 🚪", "logged_in_as": "مسجل الدخول بحساب المؤسسة:",
         "wire_title": "التحويل البنكي المباشر والفاتورة الرسمية",
-        "wire_desc": "اطلب فاتورة شكلية رسمية (Proforma Invoice) أو تعليمات التحويل البنكي المباشر (IBAN / SWIFT) لدفع الاشتراكات المؤسסية.",
+        "wire_desc": "اطلب فاتورة شكلية رسمية (Proforma Invoice) أو تعليمات التحويل البنكي المباشر (IBAN / SWIFT) لدفع الاشتراكات المؤسسية.",
         "btn_request_invoice": "طلب فاتورة رسمية للتحويل 📑"
     },
     "fr": {
@@ -89,7 +89,7 @@ TRANSLATIONS = {
     "de": {
         "name": "Deutsch", "title": "TrueLens AI", "subtitle": "Globales System zur digitalen Verifikation",
         "text_label": "📄 Textanalyse:", "text_placeholder": "Text hier einfügen...",
-        "image_label": "🖼️️ Visuelle Analyse:", "btn_submit": "Analyse Starten 🔍",
+        "image_label": "🖼 Visuelle Analyse:", "btn_submit": "Analyse Starten 🔍",
         "result_title": "Ergebnis:", "btn_speak": "Anhören 🔊",
         "error_short": "Text zu kurz.", "error_ai": "KI-Warnung aktiv.", "error_human": "Natürlicher Text.",
         "img_ai": "Visuelle Warnung (Varianz: ", "img_human": "Bild ist sauber.",
@@ -477,7 +477,7 @@ TRANSLATIONS = {
         "btn_export_pdf": "Eksporter PDF-rapport 📄", "report_id": "Verificerings-ID:",
         "login_title": "Sikker Erhvervslogin", "email_label": "Virksomheds-e-mail:", "pass_label": "Adgangskode:",
         "btn_login": "Sikker Login 🔐", "logout": "Log ud 🚪", "logged_in_as": "Logget ind som:",
-        "wire_title": "Bankoverførsel og Officiel Faktura", "wire_desc": "Anmod om en proformafaktura eller direkte bankoverførselsinstruktioner (SWIFT/IBAN).",
+        "wire_title": "Bankoverførsel og Officiel Faktura", "wire_desc": "Anmod om en proformafaktura eller direkte bankoverførselsinstruktion (SWIFT/IBAN).",
         "btn_request_invoice": "Anmod om Officiel Faktura 📑"
     },
     "no": {
@@ -850,7 +850,7 @@ HTML_TEMPLATE = """
 
             <button class="btn-submit" style="margin-top: 10px;" onclick="alert('Enterprise API Key Generated & Authorized Successfully!')">{{ t.btn_generate_key }}</button>
             
-            <!-- Bank Wire Transfer & Official Invoice Section (حل وصول المال لحسابك البنكي للشركات الكبرى) -->
+            <!-- Bank Wire Transfer & Official Invoice Section -->
             <div class="wire-box">
                 <h4 style="color: #38bdf8; margin-top: 0; font-size: 14px;">🏦 {{ t.wire_title }}</h4>
                 <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 10px;">{{ t.wire_desc }}</p>
@@ -973,7 +973,9 @@ def api_analyze():
     data = request.get_json() or {}
     text = data.get("text", "")
     
-    , 400
+    # تم تصحيح الخطأ البرمجي هنا بإضافة التحقق وإرجاع الاستجابة بـ JSON ورمز الخطأ بشكل صحيح
+    if not text.strip():
+        return jsonify({"status": "error", "message": "No text provided for analysis."}), 400
         
     ai_patterns = [r"as an ai", r"in conclusion", r"furthermore", r"it is important", r"بصفتي", r"في الختام"]
     score = sum(25 for pattern in ai_patterns if re.search(pattern, text, re.IGNORECASE))
