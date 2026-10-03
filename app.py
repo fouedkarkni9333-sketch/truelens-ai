@@ -288,7 +288,7 @@ TRANSLATIONS = {
     "tr": {
         "name": "Türkçe", "title": "TrueLens AI", "subtitle": "Küresel Dijital Doğrulama Motoru",
         "text_label": "📄 Metin Analizi:", "text_placeholder": "Metni buraya yapıştırın...",
-        "image_label": "🖼️ Görsel Analiz:", "btn_submit": "Analizi Başlat 🔍",
+        "image_label": "🖼️️ Görsel Analiz:", "btn_submit": "Analizi Başlat 🔍",
         "result_title": "Sonuç:", "btn_speak": "Sesli Dinle 🔊",
         "error_short": "Metin çok kısa.", "error_ai": "Yapay Zeka uyarısı.", "error_human": "Doğal metin.",
         "img_ai": "Görsel Uyarı (Varyans: ", "img_human": "Görsel normal.",
@@ -1150,4 +1150,6 @@ def api_analyze():
     })
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000, debug=False)
+    # قراءة المنفذ المخصص من بيئة العمل في Render أو استخدام 10000 كقيمة افتراضية
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host='0.0.0.0', port=port, debug=False)
