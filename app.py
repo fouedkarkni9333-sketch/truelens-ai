@@ -33,7 +33,7 @@ TRANSLATIONS = {
     "ar": {
         "name": "العربية (Arabic)", "title": "TrueLens AI", "subtitle": "محرك التحقق الرقمي واكتشاف الذكاء الاصطناعي العالمي",
         "text_label": "📄 التحليل النصي:", "text_placeholder": "ألصق النص هنا للتحقق من مصداقيته...",
-        "image_label": "🖼️ التحليل البصري للصورة:", "btn_submit": "بدء الفحص والتحليل الشامل 🔍",
+        "image_label": "🖼 التحليل البصري للصورة:", "btn_submit": "بدء الفحص والتحليل الشامل 🔍",
         "result_title": "نتيجة التحليل الميداني:", "btn_speak": "استماع للتقرير الصوتي 🔊",
         "error_short": "النص المدخل قصير جداً للقيام بعملية فحص دقيقة.",
         "error_ai": "تنبيه نصي: هذا النص يحمل بصمات ونبرة واضحة لنماذج الذكاء الاصطناعي بنسبة اصطناعية عالية.",
@@ -106,7 +106,7 @@ TRANSLATIONS = {
     "zh": {
         "name": "中文 (Chinese)", "title": "TrueLens AI", "subtitle": "全球数字验证与AI检测引擎",
         "text_label": "📄 文本分析：", "text_placeholder": "在此粘贴文本...",
-        "image_label": "🖼️ 图像分析：", "btn_submit": "开始综合分析 🔍",
+        "image_label": "🖼️️ 图像分析：", "btn_submit": "开始综合分析 🔍",
         "result_title": "分析结果：", "btn_speak": "语音报告 🔊",
         "error_short": "文本太短。", "error_ai": "AI警报：检测到AI特征。", "error_human": "自然文本，安全。",
         "img_ai": "视觉警报（方差：", "img_human": "图像自然正常。",
@@ -225,7 +225,7 @@ TRANSLATIONS = {
     "ko": {
         "name": "한국어 (Korean)", "title": "TrueLens AI", "subtitle": "글로벌 디지털 검증 엔진",
         "text_label": "📄 텍스트 분석:", "text_placeholder": "텍스트를 여기에 붙여넣으세요...",
-        "image_label": "🖼️ 이미지 분석:", "btn_submit": "분석 시작 🔍",
+        "image_label": "🖼️️ 이미지 분석:", "btn_submit": "분석 시작 🔍",
         "result_title": "결과:", "btn_speak": "음성 듣기 🔊",
         "error_short": "텍스트가 너무 짧습니다.", "error_ai": "AI 경고: 인공지능 생성 텍스트.", "error_human": "자연스러운 텍스트입니다.",
         "img_ai": "시각적 경고 (분산: ", "img_human": "이미지가 정상입니다.",
@@ -293,7 +293,7 @@ TRANSLATIONS = {
     "id": {
         "name": "Bahasa Indonesia", "title": "TrueLens AI", "subtitle": "Mesin Verifikasi Global",
         "text_label": "📄 Analisis Teks:", "text_placeholder": "Tempel teks di sini...",
-        "image_label": "🖼️ Analisis Gambar:", "btn_submit": "Mulai Analisis 🔍",
+        "image_label": "🖼️️ Analisis Gambar:", "btn_submit": "Mulai Analisis 🔍",
         "result_title": "Hasil:", "btn_speak": "Dengarkan Audio 🔊",
         "error_short": "Teks terlalu pendek.", "error_ai": "Peringatan AI.", "error_human": "Teks alami.",
         "img_ai": "Peringatan Visual (Varian: ", "img_human": "Gambar normal.",
@@ -488,7 +488,7 @@ TRANSLATIONS = {
         "error_short": "For kort tekst.", "error_ai": "KI-advarsel.", "error_human": "Naturlig tekst.",
         "img_ai": "Visuell advarsel (Varians: ", "img_human": "Bildet er normalt.",
         "mode_personal": "Personlig portal", "mode_pro": "Profesjonell Bedriftspakke",
-        "ent_title": "Profesjonell Sikkerhetspakke", "ent_desc": "Enhetlig verifisering, API og fakturering via banköverføring.",
+        "ent_title": "Profesjonell Sikkerhetspakke", "ent_desc": "Enhetlig verifisering, API og fakturering via banköverföring.",
         "api_endpoint_label": "API-endepunkt:", "api_key_label": "API-nøkkel:",
         "btn_generate_key": "Generer nøkkel 🔑", "docs_label": "Dokumentasjon",
         "btn_export_pdf": "Eksporter PDF-rapport 📄", "report_id": "Verifiserings-ID:",
@@ -915,7 +915,7 @@ def index():
                 variance = np.var(img_arr)
                 if mode == "pro":
                     if variance < 900:
-                        result = f"🛡️ Professional Suite Audit Alert: Document or media verification detected anomalies/tampering (Variance: {variance:.2f})."
+                        result = f"🛡 Professional Suite Audit Alert: Document or media verification detected anomalies/tampering (Variance: {variance:.2f})."
                     else:
                         result = f"✅ Professional Suite Audit Passed: High-integrity media and structural verification confirmed (Variance: {variance:.2f})."
                 else:
@@ -973,7 +973,6 @@ def api_analyze():
     data = request.get_json() or {}
     text = data.get("text", "")
     
-    # تم تصحيح الخطأ البرمجي هنا بإضافة التحقق وإرجاع الاستجابة بـ JSON ورمز الخطأ بشكل صحيح
     if not text.strip():
         return jsonify({"status": "error", "message": "No text provided for analysis."}), 400
         
@@ -992,4 +991,4 @@ def api_analyze():
     })
 
 if __name__ == "__main__":
-    app.run(0.0.0.0, 5000, False)
+    app.run(host='0.0.0.0', port=5000, debug=False)
