@@ -1,4 +1,4 @@
-from flask import Flask, render_template_string, request, jsonify
+from flask import Flask, render_template_string, request, jsonify, session, redirect, url_for
 import re
 import numpy as np
 from PIL import Image
@@ -6,8 +6,9 @@ import uuid
 from datetime import datetime
 
 app = Flask(__name__)
+app.secret_key = "truelens_secure_enterprise_secret_key_2026"
 
-# قاموس اللغات العالمي الموسع (أكثر من 30 لغة عالمية مع الحفاظ على جميع النصوص الأصلية والجديدة كاملة)
+# قاموس اللغات العالمي الموسع (أكثر من 30 لغة عالمية مع دعم بوابات المصادقة والشركات)
 TRANSLATIONS = {
     "en": {
         "name": "English", "title": "TrueLens AI", "subtitle": "Global Digital Verification & AI Detection Engine",
@@ -23,7 +24,9 @@ TRANSLATIONS = {
         "ent_title": "Professional & Enterprise Security Suite", "ent_desc": "Unified high-throughput verification, API endpoints, and compliance workflows for corporate, banking, and media sectors.",
         "api_endpoint_label": "Live API Endpoint:", "api_key_label": "API Authorization Key:",
         "btn_generate_key": "Generate Enterprise Key 🔑", "docs_label": "API Documentation & SDKs",
-        "btn_export_pdf": "Export Certified PDF Report 📄", "report_id": "Verification Tracking ID:"
+        "btn_export_pdf": "Export Certified PDF Report 📄", "report_id": "Verification Tracking ID:",
+        "login_title": "Enterprise Secure Login (Banks & Corporates)", "email_label": "Corporate Email:", "pass_label": "Password:",
+        "btn_login": "Secure Login 🔐", "logout": "Logout 🚪", "logged_in_as": "Logged in corporate account:"
     },
     "ar": {
         "name": "العربية (Arabic)", "title": "TrueLens AI", "subtitle": "محرك التحقق الرقمي واكتشاف الذكاء الاصطناعي العالمي",
@@ -40,7 +43,9 @@ TRANSLATIONS = {
         "ent_desc": "نظام موحد لفحص دفعات البيانات، الربط البرمجي (API)، واعتماد تدقيق القطاعات المصرفية والإعلامية والشركات الكبرى.",
         "api_endpoint_label": "رابط الـ API المباشر:", "api_key_label": "مفتاح ترخيص الشركات (API Key):",
         "btn_generate_key": "توليد مفتاح مؤسسي جديد 🔑", "docs_label": "دليل المطورين والوثائق التقنية (SDK)",
-        "btn_export_pdf": "تصدير تقرير الاعتماد بصيغة PDF 📄", "report_id": "الرقم المرجعي للتحقق:"
+        "btn_export_pdf": "تصدير تقرير الاعتماد بصيغة PDF 📄", "report_id": "الرقم المرجعي للتحقق:",
+        "login_title": "تسجيل الدخول الآمن للمؤسسات والبنوك", "email_label": "البريد الإلكتروني المؤسسي:", "pass_label": "كلمة المرور:",
+        "btn_login": "تسجيل دخول آمن 🔐", "logout": "تسجيل خروج 🚪", "logged_in_as": "مسجل الدخول بحساب المؤسسة:"
     },
     "fr": {
         "name": "Français", "title": "TrueLens AI", "subtitle": "Moteur mondial de vérification numérique et de détection IA",
@@ -53,12 +58,14 @@ TRANSLATIONS = {
         "ent_title": "Suite de Sécurité Professionnelle & Entreprise", "ent_desc": "Vérification unifiée, endpoints API et conformité pour les secteurs institutionnels, bancaires et médias.",
         "api_endpoint_label": "Endpoint API:", "api_key_label": "Clé d'Autorisation API:",
         "btn_generate_key": "Générer une Clé Entreprise 🔑", "docs_label": "Documentation API",
-        "btn_export_pdf": "Exporter le rapport PDF 📄", "report_id": "ID de Suivi:"
+        "btn_export_pdf": "Exporter le rapport PDF 📄", "report_id": "ID de Suivi:",
+        "login_title": "Connexion Sécurisée Entreprise (Banques & Corporates)", "email_label": "Email Professionnel:", "pass_label": "Mot de passe:",
+        "btn_login": "Connexion Sécurisée 🔐", "logout": "Déconnexion 🚪", "logged_in_as": "Connecté au compte:"
     },
     "es": {
         "name": "Español", "title": "TrueLens AI", "subtitle": "Motor Global de Verificación Digital",
         "text_label": "📄 Análisis de Texto:", "text_placeholder": "Pegue el texto aquí...",
-        "image_label": "🖼️️ Análisis Visual:", "btn_submit": "Iniciar Análisis 🔍",
+        "image_label": "🖼️ Análisis Visual:", "btn_submit": "Iniciar Análisis 🔍",
         "result_title": "Resultado:", "btn_speak": "Escuchar Audio 🔊",
         "error_short": "Texto muy corto.", "error_ai": "Alerta de IA detectada.", "error_human": "Texto natural y seguro.",
         "img_ai": "Alerta Visual (Varianza: ", "img_human": "Imagen normal y natural.",
@@ -66,7 +73,9 @@ TRANSLATIONS = {
         "ent_title": "Suite de Seguridad Profesional", "ent_desc": "Verificación unificada y API para empresas, bancos y medios.",
         "api_endpoint_label": "Endpoint de API:", "api_key_label": "Clave API:",
         "btn_generate_key": "Generar Clave 🔑", "docs_label": "Documentación",
-        "btn_export_pdf": "Exportar Informe PDF 📄", "report_id": "ID de Seguimiento:"
+        "btn_export_pdf": "Exportar Informe PDF 📄", "report_id": "ID de Seguimiento:",
+        "login_title": "Acceso Seguro para Empresas", "email_label": "Correo Corporativo:", "pass_label": "Contraseña:",
+        "btn_login": "Acceso Seguro 🔐", "logout": "Cerrar Sesión 🚪", "logged_in_as": "Sesión iniciada:"
     },
     "de": {
         "name": "Deutsch", "title": "TrueLens AI", "subtitle": "Globales System zur digitalen Verifikation",
@@ -79,7 +88,9 @@ TRANSLATIONS = {
         "ent_title": "Professionelle Sicherheits-Suite", "ent_desc": "Vereinheitlichte API und Verifikation für Unternehmen und Medien.",
         "api_endpoint_label": "API-Endpunkt:", "api_key_label": "API-Schlüssel:",
         "btn_generate_key": "Schlüssel Generieren 🔑", "docs_label": "Dokumentation",
-        "btn_export_pdf": "PDF-Bericht Exportieren 📄", "report_id": "Verifizierungs-ID:"
+        "btn_export_pdf": "PDF-Bericht Exportieren 📄", "report_id": "Verifizierungs-ID:",
+        "login_title": "Sicherer Login für Unternehmen", "email_label": "Unternehmens-E-Mail:", "pass_label": "Passwort:",
+        "btn_login": "Sicherer Login 🔐", "logout": "Abmelden 🚪", "logged_in_as": "Eingeloggt als:"
     },
     "zh": {
         "name": "中文 (Chinese)", "title": "TrueLens AI", "subtitle": "全球数字验证与AI检测引擎",
@@ -92,12 +103,14 @@ TRANSLATIONS = {
         "ent_title": "专业与企业安全套件", "ent_desc": "为企业、银行和媒体机构提供统一的高吞吐量验证和API端点。",
         "api_endpoint_label": "API 端点:", "api_key_label": "API 授权密钥:",
         "btn_generate_key": "生成企业密钥 🔑", "docs_label": "API 文档与 SDK",
-        "btn_export_pdf": "导出认证 PDF 报告 📄", "report_id": "验证跟踪编号:"
+        "btn_export_pdf": "导出认证 PDF 报告 📄", "report_id": "验证跟踪编号:",
+        "login_title": "企业与银行安全登录", "email_label": "企业邮箱:", "pass_label": "密码:",
+        "btn_login": "安全登录 🔐", "logout": "登出 🚪", "logged_in_as": "已登录账号:"
     },
     "ja": {
         "name": "日本語 (Japanese)", "title": "TrueLens AI", "subtitle": "グローバルデジタル検証エンジン",
         "text_label": "📄 テキスト分析:", "text_placeholder": "テキストを貼り付け...",
-        "image_label": "🖼️ 画像分析:", "btn_submit": "分析開始 🔍",
+        "image_label": "🖼️️ 画像分析:", "btn_submit": "分析開始 🔍",
         "result_title": "結果:", "btn_speak": "音声レポート 🔊",
         "error_short": "テキストが短すぎます。", "error_ai": "AI警告: AI生成の可能性が高いです。", "error_human": "自然なテキストです。",
         "img_ai": "視覚的警告 (分散: ", "img_human": "画像は正常です。",
@@ -105,7 +118,9 @@ TRANSLATIONS = {
         "ent_title": "プロフェッショナルセキュリティスイート", "ent_desc": "企業、金融、メディア向けの統合検証およびAPIエンドポイント。",
         "api_endpoint_label": "API エンドポイント:", "api_key_label": "API キー:",
         "btn_generate_key": "キーを生成 🔑", "docs_label": "API ドキュメント",
-        "btn_export_pdf": "認定PDFレポートのエクスポート 📄", "report_id": "検証追跡ID:"
+        "btn_export_pdf": "認定PDFレポートのエクスポート 📄", "report_id": "検証追跡ID:",
+        "login_title": "法人セキュアログイン", "email_label": "企業メール:", "pass_label": "パスワード:",
+        "btn_login": "安全にログイン 🔐", "logout": "ログアウト 🚪", "logged_in_as": "ログイン中:"
     },
     "it": {
         "name": "Italiano", "title": "TrueLens AI", "subtitle": "Motore di Verifica Globale",
@@ -118,7 +133,9 @@ TRANSLATIONS = {
         "ent_title": "Suite di Sicurezza Professionale", "ent_desc": "Verifica unificata e API per imprese, banche e media.",
         "api_endpoint_label": "Endpoint API:", "api_key_label": "Chiave API:",
         "btn_generate_key": "Genera Chiave 🔑", "docs_label": "Documentazione",
-        "btn_export_pdf": "Esporta Report PDF 📄", "report_id": "ID di Verifica:"
+        "btn_export_pdf": "Esporta Report PDF 📄", "report_id": "ID di Verifica:",
+        "login_title": "Accesso Sicuro Aziendale", "email_label": "Email Aziendale:", "pass_label": "Password:",
+        "btn_login": "Accesso Sicuro 🔐", "logout": "Esci 🚪", "logged_in_as": "Connesso come:"
     },
     "pt": {
         "name": "Português", "title": "TrueLens AI", "subtitle": "Motor Global de Verificação",
@@ -131,7 +148,9 @@ TRANSLATIONS = {
         "ent_title": "Suite de Segurança Profissional", "ent_desc": "Verificação unificada e API para fluxos corporativos e de mídia.",
         "api_endpoint_label": "Endpoint da API:", "api_key_label": "Chave da API:",
         "btn_generate_key": "Gerar Chave 🔑", "docs_label": "Documentação da API",
-        "btn_export_pdf": "Exportar Relatório PDF 📄", "report_id": "ID de Verificação:"
+        "btn_export_pdf": "Exportar Relatório PDF 📄", "report_id": "ID de Verificação:",
+        "login_title": "Login Corporativo Seguro", "email_label": "E-mail Corporativo:", "pass_label": "Senha:",
+        "btn_login": "Login Seguro 🔐", "logout": "Sair 🚪", "logged_in_as": "Conectado como:"
     },
     "ru": {
         "name": "Русский (Russian)", "title": "TrueLens AI", "subtitle": "Глобальный движок проверки",
@@ -144,7 +163,9 @@ TRANSLATIONS = {
         "ent_title": "Комплекс профессиональной безопасности", "ent_desc": "Унифицированная пакетная проверка и API для бизнеса и СМИ.",
         "api_endpoint_label": "API эндпоинт:", "api_key_label": "API ключ:",
         "btn_generate_key": "Сгенерировать ключ 🔑", "docs_label": "Документация",
-        "btn_export_pdf": "Экспортировать PDF-отчет 📄", "report_id": "ID отслеживания:"
+        "btn_export_pdf": "Экспортировать PDF-отчет 📄", "report_id": "ID отслеживания:",
+        "login_title": "Защищенный вход для бизнеса", "email_label": "Корпоративный Email:", "pass_label": "Пароль:",
+        "btn_login": "Безопасный вход 🔐", "logout": "Выйти 🚪", "logged_in_as": "Вход выполнен:"
     },
     "hi": {
         "name": "हिन्दी (Hindi)", "title": "TrueLens AI", "subtitle": "वैश्विक डिजिटल सत्यापन इंजन",
@@ -157,7 +178,9 @@ TRANSLATIONS = {
         "ent_title": "पेशेवर सुरक्षा सूट", "ent_desc": "व्यवसायों और मीडिया के लिए एकीकृत सत्यापन और API।",
         "api_endpoint_label": "API एंडपॉइंट:", "api_key_label": "API कुंजी:",
         "btn_generate_key": "कुंजी बनाएँ 🔑", "docs_label": "دस्तावेज़",
-        "btn_export_pdf": "PDF रिपोर्ट निर्यात करें 📄", "report_id": "सत्यापन आईडी:"
+        "btn_export_pdf": "PDF रिपोर्ट निर्यात करें 📄", "report_id": "सत्यापन आईडी:",
+        "login_title": "कॉर्पोरेट सुरक्षित लॉगिन", "email_label": "कॉर्पोरेट ईमेल:", "pass_label": "पासवर्ड:",
+        "btn_login": "सुरक्षित लॉगिन 🔐", "logout": "लॉग आउट 🚪", "logged_in_as": "लॉग इन किया गया:"
     },
     "tr": {
         "name": "Türkçe", "title": "TrueLens AI", "subtitle": "Küresel Dijital Doğrulama Motoru",
@@ -170,7 +193,9 @@ TRANSLATIONS = {
         "ent_title": "Profesyonel Güvenlik Paketi", "ent_desc": "Kurumsal, finansal ve medya iş akışları için birleştirilmiş API ve doğrulama.",
         "api_endpoint_label": "API Ucu:", "api_key_label": "API Yetki Anahtarı:",
         "btn_generate_key": "Anahtar Üret 🔑", "docs_label": "API Belgeleri",
-        "btn_export_pdf": "PDF Raporunu Dışa Aktar 📄", "report_id": "Doğrulama ID:"
+        "btn_export_pdf": "PDF Raporunu Dışa Aktar 📄", "report_id": "Doğrulama ID:",
+        "login_title": "Kurumsal Güvenli Giriş", "email_label": "Kurumsal E-posta:", "pass_label": "Şifre:",
+        "btn_login": "Güvenli Giriş 🔐", "logout": "Çıkış 🚪", "logged_in_as": "Giriş yapılan hesap:"
     },
     "ko": {
         "name": "한국어 (Korean)", "title": "TrueLens AI", "subtitle": "글로벌 디지털 검증 엔진",
@@ -183,7 +208,9 @@ TRANSLATIONS = {
         "ent_title": "전문가 보안 스위트", "ent_desc": "기업, 금융, 미디어 기관을 위한 통합 검증 및 API 연동 지원.",
         "api_endpoint_label": "API 엔드포인트:", "api_key_label": "API 키:",
         "btn_generate_key": "키 생성 🔑", "docs_label": "API 문서",
-        "btn_export_pdf": "PDF 보고서 내보내기 📄", "report_id": "추적 ID:"
+        "btn_export_pdf": "PDF 보고서 내보내기 📄", "report_id": "추적 ID:",
+        "login_title": "기업 보안 로그인", "email_label": "기업 이메일:", "pass_label": "비밀번호:",
+        "btn_login": "안전한 로그인 🔐", "logout": "로그아웃 🚪", "logged_in_as": "로그인 계정:"
     },
     "nl": {
         "name": "Nederlands", "title": "TrueLens AI", "subtitle": "Wereldwijde Verificatie Engine",
@@ -196,7 +223,9 @@ TRANSLATIONS = {
         "ent_title": "Professionele Beveiligingssuite", "ent_desc": "Geïntegreerde verificatie en API voor corporate, banken en media.",
         "api_endpoint_label": "API-endpoint:", "api_key_label": "API-sleutel:",
         "btn_generate_key": "Sleutel Genereren 🔑", "docs_label": "Documentatie",
-        "btn_export_pdf": "Exporteer PDF-rapport 📄", "report_id": "Verificatie-ID:"
+        "btn_export_pdf": "Exporteer PDF-rapport 📄", "report_id": "Verificatie-ID:",
+        "login_title": "Zakelijk Veilige Login", "email_label": "Zakelijk E-mailadres:", "pass_label": "Wachtwoord:",
+        "btn_login": "Veilig Inloggen 🔐", "logout": "Uitloggen 🚪", "logged_in_as": "Ingelogd als:"
     },
     "pl": {
         "name": "Polski", "title": "TrueLens AI", "subtitle": "Globalny Silnik Weryfikacji",
@@ -209,7 +238,9 @@ TRANSLATIONS = {
         "ent_title": "Profesjonalny Pakiet Bezpieczeństwa", "ent_desc": "Zintegrowana weryfikacja i API dla instytucji, banków i mediów.",
         "api_endpoint_label": "Endpoint API:", "api_key_label": "Klucz API:",
         "btn_generate_key": "Generuj Klucz 🔑", "docs_label": "Dokumentacja",
-        "btn_export_pdf": "Eksportuj raport PDF 📄", "report_id": "ID weryfikacji:"
+        "btn_export_pdf": "Eksportuj raport PDF 📄", "report_id": "ID weryfikacji:",
+        "login_title": "Bezpieczne logowanie korporacyjne", "email_label": "Email firmowy:", "pass_label": "Hasło:",
+        "btn_login": "Bezpieczne logowanie 🔐", "logout": "Wyloguj 🚪", "logged_in_as": "Zalogowano jako:"
     },
     "vi": {
         "name": "Tiếng Việt", "title": "TrueLens AI", "subtitle": "Công cụ Xác thực Toàn cầu",
@@ -222,7 +253,9 @@ TRANSLATIONS = {
         "ent_title": "Bộ bảo mật Chuyên nghiệp", "ent_desc": "Xác thực đồng bộ và API cho tổ chức, ngân hàng và truyền thông.",
         "api_endpoint_label": "Điểm cuối API:", "api_key_label": "Khóa API:",
         "btn_generate_key": "Tạo khóa 🔑", "docs_label": "Tài liệu API",
-        "btn_export_pdf": "Xuất Báo cáo PDF 📄", "report_id": "ID Xác thực:"
+        "btn_export_pdf": "Xuất Báo cáo PDF 📄", "report_id": "ID Xác thực:",
+        "login_title": "Đăng nhập Doanh nghiệp Bảo mật", "email_label": "Email Doanh nghiệp:", "pass_label": "Mật khẩu:",
+        "btn_login": "Đăng nhập An toàn 🔐", "logout": "Đăng xuất 🚪", "logged_in_as": "Đã đăng nhập:"
     },
     "id": {
         "name": "Bahasa Indonesia", "title": "TrueLens AI", "subtitle": "Mesin Verifikasi Global",
@@ -235,7 +268,9 @@ TRANSLATIONS = {
         "ent_title": "Suite Keamanan Profesional", "ent_desc": "Verifikasi terpadu dan API untuk korporat, perbankan, dan media.",
         "api_endpoint_label": "Endpoint API:", "api_key_label": "Kunci API:",
         "btn_generate_key": "Buat Kunci 🔑", "docs_label": "Dokumentasi API",
-        "btn_export_pdf": "Ekspor Laporan PDF 📄", "report_id": "ID Verifikasi:"
+        "btn_export_pdf": "Ekspor Laporan PDF 📄", "report_id": "ID Verifikasi:",
+        "login_title": "Login Korporat Aman", "email_label": "Email Perusahaan:", "pass_label": "Kata Sandi:",
+        "btn_login": "Login Aman 🔐", "logout": "Keluar 🚪", "logged_in_as": "Masuk sebagai:"
     },
     "sv": {
         "name": "Svenska", "title": "TrueLens AI", "subtitle": "Global Verifieringsmotor",
@@ -248,7 +283,9 @@ TRANSLATIONS = {
         "ent_title": "Professionell Säkerhetssvit", "ent_desc": "Enhetlig verifiering och API för företag, banker och media.",
         "api_endpoint_label": "API-endpoint:", "api_key_label": "API-nyckel:",
         "btn_generate_key": "Generera nyckel 🔑", "docs_label": "API-dokumentation",
-        "btn_export_pdf": "Exportera PDF-rapport 📄", "report_id": "Verifierings-ID:"
+        "btn_export_pdf": "Exportera PDF-rapport 📄", "report_id": "Verifierings-ID:",
+        "login_title": "Säker Företagsinloggning", "email_label": "Företagsmejl:", "pass_label": "Lösenord:",
+        "btn_login": "Säker Inloggning 🔐", "logout": "Logga ut 🚪", "logged_in_as": "Inloggad som:"
     },
     "uk": {
         "name": "Українська (Ukrainian)", "title": "TrueLens AI", "subtitle": "Глобальний рушій перевірки",
@@ -261,7 +298,9 @@ TRANSLATIONS = {
         "ent_title": "Комплекс професійної безпеки", "ent_desc": "Уніфікована перевірка та API для корпорацій, банків та медіа.",
         "api_endpoint_label": "API ендпоінт:", "api_key_label": "API ключ:",
         "btn_generate_key": "Згенерувати ключ 🔑", "docs_label": "Документація",
-        "btn_export_pdf": "Експортувати PDF-звіт 📄", "report_id": "ID відстеження:"
+        "btn_export_pdf": "Експортувати PDF-звіт 📄", "report_id": "ID відстеження:",
+        "login_title": "Захищений корпоративний вхід", "email_label": "Корпоративний Email:", "pass_label": "Пароль:",
+        "btn_login": "Безпечний вхід 🔐", "logout": "Вийти 🚪", "logged_in_as": "Увійшов як:"
     },
     "el": {
         "name": "Ελληνικά (Greek)", "title": "TrueLens AI", "subtitle": "Παγκόσμια Μηχανή Επαλήθευσης",
@@ -274,7 +313,10 @@ TRANSLATIONS = {
         "ent_title": "Επαγγελματική Σουίτα Ασφάλειας", "ent_desc": "Ενοποιημένη επαλήθευση και API για επιχειρήσεις, τράπεζες και μέσα ενημέρωσης.",
         "api_endpoint_label": "API Endpoint:", "api_key_label": "Κλειδί API:",
         "btn_generate_key": "Δημιουργία Κλειδιού 🔑", "docs_label": "Τεκμηρίωση",
-        "btn_export_pdf": "Εξαγωγή Αναφοράς PDF 📄", "report_id": "ID Αναφοράς:"
+        "btn_export_pdf": "Εξαγωγή Αναφοράς PDF 📄", "report_id": "ID Αναφοράς:",
+        "login_title": "Ասահովված Մուտք", "email_label": "Կորპորատիվ Էլ. փոստ:", "pass_label": "Գաղտնաբառ:",
+        "login_title": "Ασφαλής Είσοδος Επιχείρησης", "email_label": "Εταιρικό Email:", "pass_label": "Κωδικός:",
+        "btn_login": "Ασφαλής Σύνδεση 🔐", "logout": "Αποσύνδεση 🚪", "logged_in_as": "Συνδεδεμένος ως:"
     },
     "he": {
         "name": "עברית (Hebrew)", "title": "TrueLens AI", "subtitle": "מנוע אימות דיגיטלי עולמי",
@@ -287,7 +329,9 @@ TRANSLATIONS = {
         "ent_title": "חבילת אבטחה מקצועית", "ent_desc": "אימות מאוחד וחיבור API עבור חברות, בנקים וגופי מדיה.",
         "api_endpoint_label": "כתובת API:", "api_key_label": "מפתח API:",
         "btn_generate_key": "צור מפתח 🔑", "docs_label": "תיעוד API",
-        "btn_export_pdf": "ייצוא דוח PDF 📄", "report_id": "מזהה מעקב:"
+        "btn_export_pdf": "ייצוא דוח PDF 📄", "report_id": "מזהה מעקב:",
+        "login_title": "כניסת אבטחה ארגונית", "email_label": "דוא\"ל ארגוני:", "pass_label": "סיסמה:",
+        "btn_login": "התחברות מאובטחת 🔐", "logout": "התנתק 🚪", "logged_in_as": "מחובר כחשבון:"
     },
     "ro": {
         "name": "Română", "title": "TrueLens AI", "subtitle": "Motor Global de Verificare",
@@ -300,7 +344,9 @@ TRANSLATIONS = {
         "ent_title": "Suite de Securitate Profesională", "ent_desc": "Verificare unificată și API pentru corporații, bănci și mass-media.",
         "api_endpoint_label": "Endpoint API:", "api_key_label": "Cheie API:",
         "btn_generate_key": "Generează Cheie 🔑", "docs_label": "Documentație",
-        "btn_export_pdf": "Exportă Raport PDF 📄", "report_id": "ID Verificare:"
+        "btn_export_pdf": "Exportă Raport PDF 📄", "report_id": "ID Verificare:",
+        "login_title": "Autentificare Corporativă Securizată", "email_label": "Email Corporativ:", "pass_label": "Parolă:",
+        "btn_login": "Autentificare Securizată 🔐", "logout": "Deconectare 🚪", "logged_in_as": "Autentificat ca:"
     },
     "hu": {
         "name": "Magyar", "title": "TrueLens AI", "subtitle": "Globális Ellenőrző Motor",
@@ -313,7 +359,9 @@ TRANSLATIONS = {
         "ent_title": "Professzionális Biztonsági Csomag", "ent_desc": "Egységesített ellenőrzés és API vállalatok, bankok és média számára.",
         "api_endpoint_label": "API Végpont:", "api_key_label": "API Kulcs:",
         "btn_generate_key": "Kulcs Generálása 🔑", "docs_label": "Dokumentáció",
-        "btn_export_pdf": "PDF Jelentés Exportálása 📄", "report_id": "Követési Azonosító:"
+        "btn_export_pdf": "PDF Jelentés Exportálása 📄", "report_id": "Követési Azonosító:",
+        "login_title": "Biztonságos Vállalati Bejelentkezés", "email_label": "Vállalati E-mail:", "pass_label": "Jelszó:",
+        "btn_login": "Biztonságos Bejelentkezés 🔐", "logout": "Kijelentkezés 🚪", "logged_in_as": "Bejelentkezve mint:"
     },
     "cs": {
         "name": "Čeština", "title": "TrueLens AI", "subtitle": "Globální Ověřovací Motor",
@@ -327,7 +375,9 @@ TRANSLATIONS = {
         "ent_desc": "Jednotné ověřování a API pro korporace, banky a média.",
         "api_endpoint_label": "API Endpoint:", "api_key_label": "API Klíč:",
         "btn_generate_key": "Generovat klíč 🔑", "docs_label": "Dokumentace",
-        "btn_export_pdf": "Exportovat PDF Zprávu 📄", "report_id": "ID Ověření:"
+        "btn_export_pdf": "Exportovat PDF Zprávu 📄", "report_id": "ID Ověření:",
+        "login_title": "Zabezpečené firemní přihlášení", "email_label": "Firemní E-mail:", "pass_label": "Heslo:",
+        "btn_login": "Zabezpečené přihlášení 🔐", "logout": "Odhlásit 🚪", "logged_in_as": "Přihlášen jako:"
     },
     "th": {
         "name": "ไทย (Thai)", "title": "TrueLens AI", "subtitle": "เครื่องมือตรวจสอบดิจิทัลระดับโลก",
@@ -340,7 +390,9 @@ TRANSLATIONS = {
         "ent_title": "ชุดความปลอดภัยระดับมืออาชีพ", "ent_desc": "การตรวจสอบแบบครบวงจรและ API สำหรับองค์กร ธนาคาร และสื่อ",
         "api_endpoint_label": "จุดสิ้นสุด API:", "api_key_label": "คีย์ API:",
         "btn_generate_key": "สร้างคีย์องค์กร 🔑", "docs_label": "เอกสารคู่มือ API",
-        "btn_export_pdf": "ส่งออกรายงาน PDF 📄", "report_id": "รหัสติดตามการตรวจสอบ:"
+        "btn_export_pdf": "ส่งออกรายงาน PDF 📄", "report_id": "รหัสติดตามการตรวจสอบ:",
+        "login_title": "เข้าสู่ระบบองค์กรอย่างปลอดภัย", "email_label": "อีเมลองค์กร:", "pass_label": "รหัสผ่าน:",
+        "btn_login": "เข้าสู่ระบบอย่างปลอดภัย 🔐", "logout": "ออกจากระบบ 🚪", "logged_in_as": "เข้าสู่ระบบในฐานะ:"
     },
     "fi": {
         "name": "Suomi", "title": "TrueLens AI", "subtitle": "Globaali Varmennusmoottori",
@@ -353,12 +405,14 @@ TRANSLATIONS = {
         "ent_title": "Ammattimainen Turvallisuuspaketti", "ent_desc": "Yhtenäinen varmennus ja API yrityksille, pankeille ja medialle.",
         "api_endpoint_label": "API-päätepiste:", "api_key_label": "API-avain:",
         "btn_generate_key": "Luo avain 🔑", "docs_label": "Dokumentaatio",
-        "btn_export_pdf": "Vie PDF-raportti 📄", "report_id": "Tunniste:"
+        "btn_export_pdf": "Vie PDF-raportti 📄", "report_id": "Tunniste:",
+        "login_title": "Turvallinen yrityskirjautuminen", "email_label": "Yrityksen sähköposti:", "pass_label": "Salasana:",
+        "btn_login": "Turvallinen kirjautuminen 🔐", "logout": "Kirjaudu ulos 🚪", "logged_in_as": "Kirjautunut:"
     },
     "da": {
         "name": "Dansk", "title": "TrueLens AI", "subtitle": "Global Verificeringsmotor",
         "text_label": "📄 Tekstanalyse:", "text_placeholder": "Indsæt tekst her...",
-        "image_label": "🖼️️ Billedanalyse:", "btn_submit": "Start Analyse 🔍",
+        "image_label": "🖼️ Billedanalyse:", "btn_submit": "Start Analyse 🔍",
         "result_title": "Resultat:", "btn_speak": "Lyt til Lyd 🔊",
         "error_short": "For kort tekst.", "error_ai": "AI-advarsel.", "error_human": "Naturlig tekst.",
         "img_ai": "Visuel advarsel (Varians: ", "img_human": "Billedet er normalt.",
@@ -366,7 +420,9 @@ TRANSLATIONS = {
         "ent_title": "Professionel Sikkerhedssuite", "ent_desc": "Enhedset verificering og API til virksomheder, banker og medier.",
         "api_endpoint_label": "API-endpoint:", "api_key_label": "API-nøgle:",
         "btn_generate_key": "Generer nøgle 🔑", "docs_label": "API-dokumentation",
-        "btn_export_pdf": "Eksporter PDF-rapport 📄", "report_id": "Verificerings-ID:"
+        "btn_export_pdf": "Eksporter PDF-rapport 📄", "report_id": "Verificerings-ID:",
+        "login_title": "Sikker Erhvervslogin", "email_label": "Virksomheds-e-mail:", "pass_label": "Adgangskode:",
+        "btn_login": "Sikker Login 🔐", "logout": "Log ud 🚪", "logged_in_as": "Logget ind som:"
     },
     "no": {
         "name": "Norsk", "title": "TrueLens AI", "subtitle": "Global Verifiseringsmotor",
@@ -379,7 +435,9 @@ TRANSLATIONS = {
         "ent_title": "Profesjonell Sikkerhetspakke", "ent_desc": "Enhetlig verifisering og API for bedrifter, banker og media.",
         "api_endpoint_label": "API-endepunkt:", "api_key_label": "API-nøkkel:",
         "btn_generate_key": "Generer nøkkel 🔑", "docs_label": "Dokumentasjon",
-        "btn_export_pdf": "Eksporter PDF-rapport 📄", "report_id": "Verifiserings-ID:"
+        "btn_export_pdf": "Eksporter PDF-rapport 📄", "report_id": "Verifiserings-ID:",
+        "login_title": "Sikker bedriftspålogging", "email_label": "Bedrifts-e-post:", "pass_label": "Passord:",
+        "btn_login": "Sikker pålogging 🔐", "logout": "Logg ut 🚪", "logged_in_as": "Logget inn som:"
     },
     "ms": {
         "name": "Bahasa Melayu", "title": "TrueLens AI", "subtitle": "Enjin Pengesahan Global",
@@ -392,12 +450,14 @@ TRANSLATIONS = {
         "ent_title": "Suite Keselamatan Profesional", "ent_desc": "Pengesahan bersepadu dan API untuk korporat, perbankan, dan media.",
         "api_endpoint_label": "Titik Akhir API:", "api_key_label": "Kunci API:",
         "btn_generate_key": "Jana Kunci 🔑", "docs_label": "Dokumentasi API",
-        "btn_export_pdf": "Eksport Laporan PDF 📄", "report_id": "ID Pengesahan:"
+        "btn_export_pdf": "Eksport Laporan PDF 📄", "report_id": "ID Pengesahan:",
+        "login_title": "Log Masuk Korporat Selamat", "email_label": "E-mel Syarikat:", "pass_label": "Kata Laluan:",
+        "btn_login": "Log Masuk Selamat 🔐", "logout": "Log Keluar 🚪", "logged_in_as": "Log masuk sebagai:"
     },
     "bn": {
         "name": "বাংলা (Bengali)", "title": "TrueLens AI", "subtitle": "গ্লোবাল ভেরিফিকেশন ইঞ্জিন",
         "text_label": "📄 টেক্সট বিশ্লেষণ:", "text_placeholder": "এখানে টেক্সট পেস্ট করুন...",
-        "image_label": "🖼️️ ছবি বিশ্লেষণ:", "btn_submit": "বিশ্লেষণ শুরু করুন 🔍",
+        "image_label": "🖼️ ছবি বিশ্লেষণ:", "btn_submit": "বিশ্লেষণ শুরু করুন 🔍",
         "result_title": "ফলাফল:", "btn_speak": "অডিও শুনুন 🔊",
         "error_short": "টেক্সট খুব ছোট।", "error_ai": "AI সতর্কতা: AI দ্বারা তৈরি।", "error_human": "স্বাভাবিক টেক্সট।",
         "img_ai": "ভিজ্যুয়াল সতর্কতা (ভ্যারিয়েন্স: ", "img_human": "ছবিটি স্বাভাবিক।",
@@ -405,7 +465,9 @@ TRANSLATIONS = {
         "ent_title": "প্রফেশনাল সিকিউরিটি স্যুট", "ent_desc": "কর্পোরেট, ব্যাংক এবং মিডিয়ার জন্য সমন্বিত যাচাইকরণ এবং API সাপোর্ট।",
         "api_endpoint_label": "API এন্ডপয়েন্ট:", "api_key_label": "API কী:",
         "btn_generate_key": "কী জেনারেট করুন 🔑", "docs_label": "নথিপত্র",
-        "btn_export_pdf": "PDF রিপোর্ট এক্সপোর্ট করুন 📄", "report_id": "যাচাইকরণ আইডি:"
+        "btn_export_pdf": "PDF রিপোর্ট এক্সপোর্ট করুন 📄", "report_id": "যাচাইকরণ আইডি:",
+        "login_title": "এন্টারপ্রাইজ সিকিউর লগইন", "email_label": "কর্পোরেট ইমেল:", "pass_label": "পাসওয়ার্ড:",
+        "btn_login": "নিরাপদ লগইন 🔐", "logout": "লগআউট 🚪", "logged_in_as": "লগইন করা আছে:"
     },
     "fa": {
         "name": "فارسی (Persian)", "title": "TrueLens AI", "subtitle": "موتور جهانی تأیید اصالت",
@@ -418,7 +480,9 @@ TRANSLATIONS = {
         "ent_title": "مجموعه امنیت حرفه‌ای", "ent_desc": "اعتبارسنجی یکپارچه و اتصال API برای شرکت‌ها، بانک‌ها و رسانه‌ها.",
         "api_endpoint_label": "نقطه پایانی API:", "api_key_label": "کلید مجوز API:",
         "btn_generate_key": "تولید کلید سازمانی 🔑", "docs_label": "مستندات API",
-        "btn_export_pdf": "صدور گزارش رسمی PDF 📄", "report_id": "شناسه رهگیری:"
+        "btn_export_pdf": "صدور گزارش رسمی PDF 📄", "report_id": "شناسه رهگیری:",
+        "login_title": "ورود امن سازمانی و بانکی", "email_label": "ایمیل سازمانی:", "pass_label": "رمز عبور:",
+        "btn_login": "ورود امن 🔐", "logout": "خروج 🚪", "logged_in_as": "وارد شده با حساب:"
     },
     "ur": {
         "name": "اردو (Urdu)", "title": "TrueLens AI", "subtitle": "عالمی ڈیجیٹل تصدیقی انجن",
@@ -431,7 +495,9 @@ TRANSLATIONS = {
         "ent_title": "پروفیشنل سیکیورٹی سوٹ", "ent_desc": "کارپوریٹ، بینکنگ اور میڈیا سیکٹرز کے لیے متفقہ تصدیق اور API کنکشن۔",
         "api_endpoint_label": "API اینڈ پوائنٹ:", "api_key_label": "API کلید:",
         "btn_generate_key": "انٹرپرाइज کلید بنائیں 🔑", "docs_label": "دستاویزات",
-        "btn_export_pdf": "پی ڈی ایف رپورٹ برآمد کریں 📄", "report_id": "تصدیقی شناختی نمبر:"
+        "btn_export_pdf": "پی ڈی ایف رپورٹ برآمد کریں 📄", "report_id": "تصدیقی شناختی نمبر:",
+        "login_title": "کارپوریٹ محفوظ لاگ ان (بینک اور ادارے)", "email_label": "کارپوریٹ ای میل:", "pass_label": "پاس ورڈ:",
+        "btn_login": "محفوظ لاگ ان 🔐", "logout": "لاگ آؤٹ 🚪", "logged_in_as": "لاگ ان اکاؤنٹ:"
     }
 }
 
@@ -524,12 +590,12 @@ HTML_TEMPLATE = """
         p.subtitle { color: var(--text-muted); font-size: 12px; margin: 0; }
         .input-group { margin-bottom: 18px; }
         label { display: block; margin-bottom: 6px; font-size: 13px; color: #cbd5e1; font-weight: 600; }
-        textarea {
-            width: 100%; height: 100px; padding: 12px; border-radius: 10px;
+        textarea, input[type="text"], input[type="password"] {
+            width: 100%; padding: 12px; border-radius: 10px;
             border: 1px solid #475569; background: #0f172a; color: white;
             font-family: 'Inter', sans-serif; font-size: 14px; box-sizing: border-box; resize: vertical;
         }
-        textarea:focus { outline: none; border-color: var(--accent-color); }
+        textarea:focus, input:focus { outline: none; border-color: var(--accent-color); }
         .file-upload-box {
             border: 2px dashed #475569; padding: 12px; border-radius: 10px;
             text-align: center; background: #0f172a;
@@ -583,6 +649,13 @@ HTML_TEMPLATE = """
             background: #334155; color: white; border: none; padding: 4px 8px;
             border-radius: 4px; font-size: 11px; cursor: pointer;
         }
+        .login-box {
+            background: #020617;
+            border: 1px solid #334155;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+        }
     </style>
 </head>
 <body>
@@ -605,7 +678,7 @@ HTML_TEMPLATE = """
             <p class="subtitle">{{ t.subtitle }}</p>
         </div>
 
-        <!-- Mode Toggle Switcher: زرين رئيسيين فقط (الأفراد + الاحترافيين والمؤسسات بجميع قطاعاتها) -->
+        <!-- Mode Toggle Switcher -->
         <div class="mode-toggle">
             <a href="?lang={{ current_lang }}&mode=personal" class="mode-btn {% if mode == 'personal' %}active{% endif %}">👤 {{ t.mode_personal }}</a>
             <a href="?lang={{ current_lang }}&mode=pro" class="mode-btn {% if mode == 'pro' %}active{% endif %}">🏢 {{ t.mode_pro }}</a>
@@ -641,9 +714,33 @@ HTML_TEMPLATE = """
         {% endif %}
 
         {% else %}
-        <!-- Professional & Enterprise Unified Portal Mode (يخدم الشركات، البنوك، الصحفيين والمراسيل بزر موحد) -->
+        <!-- Professional & Enterprise Unified Portal Mode with Secure Login -->
         <div class="enterprise-container">
             <h3>🏢 {{ t.ent_title }}</h3>
+            
+            {% if not session.get('enterprise_logged_in') %}
+            <!-- Login Form for Corporate / Bank / Media Users -->
+            <div class="login-box">
+                <h4 style="color: #38bdf8; margin-top: 0; font-size: 14px;">🔐 {{ t.login_title }}</h4>
+                <form method="POST" action="/enterprise-login?lang={{ current_lang }}&mode=pro">
+                    <div class="input-group">
+                        <label>{{ t.email_label }}</label>
+                        <input type="text" name="corporate_email" placeholder="e.g. admin@bank.com" required>
+                    </div>
+                    <div class="input-group">
+                        <label>{{ t.pass_label }}</label>
+                        <input type="password" name="corporate_password" placeholder="••••••••" required>
+                    </div>
+                    <button type="submit" class="btn-submit" style="padding: 10px; font-size: 13px;">{{ t.btn_login }}</button>
+                </form>
+            </div>
+            {% else %}
+            <!-- Logged In Dashboard -->
+            <div style="background: #020617; padding: 12px; border-radius: 8px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 12px; color: #34d399;">✅ {{ t.logged_in_as }} <b>{{ session.get('enterprise_email') }}</b></span>
+                <a href="/enterprise-logout?lang={{ current_lang }}&mode=pro" style="color: #f87171; font-size: 12px; text-decoration: none; font-weight: 600;">{{ t.logout }}</a>
+            </div>
+
             <p>{{ t.ent_desc }}</p>
             
             <form method="POST" enctype="multipart/form-data" style="margin-top: 15px;">
@@ -694,6 +791,7 @@ HTML_TEMPLATE = """
                 <button class="btn-export" onclick="alert('Professional Certified PDF Report Exported Successfully!')">{{ t.btn_export_pdf }}</button>
             </div>
             {% endif %}
+            {% endif %}
         </div>
         {% endif %}
     </div>
@@ -725,7 +823,7 @@ def index():
     text_input = ""
     tracking_id = None
     
-    if request.method == "POST":
+    if request.method == "POST" and (mode == "personal" or session.get('enterprise_logged_in')):
         text_input = request.form.get("text_content", "")
         uploaded_file = request.files.get("image_file")
         tracking_id = str(uuid.uuid4()).upper()[:12]
@@ -769,6 +867,25 @@ def index():
             tracking_id = None
             
     return render_template_string(HTML_TEMPLATE, t=t, current_lang=lang, mode=mode, translations=TRANSLATIONS, result=result, text_input=text_input, tracking_id=tracking_id)
+
+@app.route("/enterprise-login", methods=["POST"])
+def enterprise_login():
+    lang = request.args.get("lang", "en")
+    email = request.form.get("corporate_email", "")
+    password = request.form.get("corporate_password", "")
+    
+    if email.strip() and len(password) >= 4:
+        session['enterprise_logged_in'] = True
+        session['enterprise_email'] = email
+        
+    return redirect(url_for('index', lang=lang, mode="pro"))
+
+@app.route("/enterprise-logout")
+def enterprise_logout():
+    lang = request.args.get("lang", "en")
+    session.pop('enterprise_logged_in', None)
+    session.pop('enterprise_email', None)
+    return redirect(url_for('index', lang=lang, mode="pro"))
 
 # مسار API مخصص للشركات (Enterprise API Endpoint)
 @app.route("/api/v1/analyze", methods=["POST"])
