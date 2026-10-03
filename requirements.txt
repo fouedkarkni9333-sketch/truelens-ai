@@ -1,7 +1,9 @@
-Flask==3.0.2
-Werkzeug==3.0.1
-requests==2.31.0
-reportlab==4.1.0
-gunicorn==21.2.0
-numpy
-Pillow
+Flask==3.0.2[span_5](start_span)[span_5](end_span)
+Werkzeug==3.0.1[span_6](start_span)[span_6](end_span)
+requests==2.31.0[span_7](start_span)[span_7](end_span)
+reportlab==4.1.0[span_8](start_span)[span_8](end_span)
+gunicorn==21.2.0[span_9](start_span)[span_9](end_span)
+redis
+Flask-Session
+celery
+SQLAlchemy
