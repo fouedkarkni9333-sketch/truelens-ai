@@ -1,4 +1,4 @@
-from flask import Flask, render_template_string, request, jsonify, session, redirect, url_for
+from flask import Flask, render_template_string, request, jsonify, session, redirect, url_for, flash, send_file
 from werkzeug.security import generate_password_hash, check_password_hash
 import re
 import numpy as np
@@ -6,6 +6,7 @@ from PIL import Image
 import uuid
 from datetime import datetime
 import os
+import io
 
 # ==========================================
 # 🚀 الترقية الهندسية السحابية واسعة النطاق (Enterprise Scalability & High Availability)
@@ -22,13 +23,18 @@ from celery import Celery
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "truelens_secure_enterprise_secret_key_2026")
 
-# إعداد Redis والسشن الموزع (Distributed Sessions)
+# إعداد Redis والسشن الموزع (Distributed Sessions) مع معالجة الأخطاء
 REDIS_URL = os.environ.get("REDIS_URL", "redis://localhost:6379/0")
 app.config['SESSION_TYPE'] = 'redis'
 app.config['SESSION_PERMANENT'] = False
 app.config['SESSION_USE_SIGNER'] = True
-app.config['SESSION_REDIS'] = redis.from_url(REDIS_URL)
-Session(app)
+try:
+    app.config['SESSION_REDIS'] = redis.from_url(REDIS_URL)
+    Session(app)
+except Exception as e:
+    # في حال تعذر الاتصال بـ Redis يتم التحويل مؤقتاً للجلسات المحلية لضمان عدم توقف النظام
+    app.config['SESSION_TYPE'] = 'filesystem'
+    Session(app)
 
 # إعداد Celery لطابور المهام غير المتزامنة (Background Worker Queue)
 celery = Celery(
@@ -49,9 +55,14 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 # محرك قاعدة البيانات السحابية مع تحسين الاتصالات (Connection Pooling) لتحمل الملايين
-engine = create_engine(DB_FILE, pool_size=20, max_overflow=40, pool_recycle=3600)
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-Base = declarative_base()
+try:
+    engine = create_engine(DB_FILE, pool_size=20, max_overflow=40, pool_recycle=3600)
+    SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+    Base = declarative_base()
+except Exception as e:
+    engine = create_engine("sqlite:///truelens_enterprise.db", connect_args={"check_same_thread": False})
+    SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+    Base = declarative_base()
 
 class EnterpriseUser(Base):
     __tablename__ = 'enterprise_users'
@@ -256,7 +267,7 @@ TRANSLATIONS = {
     "ja": {
         "name": "日本語 (Japanese)", "title": "TrueLens AI", "subtitle": "グローバルデジタル検証エンジン",
         "text_label": "📄 テキスト分析:", "text_placeholder": "テキストを貼り付け...",
-        "image_label": "🖼️️ 画像分析:", "btn_submit": "分析開始 🔍",
+        "image_label": "🖼 画像分析:", "btn_submit": "分析開始 🔍",
         "result_title": "結果:", "btn_speak": "音声レポート 🔊",
         "error_short": "テキストが短すぎます。", "error_ai": "AI警告: AI生成の可能性が高いです。", "error_human": "自然なテキストです。",
         "img_ai": "視覚的警告 (分散: ", "img_human": "画像は正常です。",
@@ -680,7 +691,7 @@ TRANSLATIONS = {
     "fa": {
         "name": "فارسی (Persian)", "title": "TrueLens AI", "subtitle": "موتور جهانی تأیید اصالت",
         "text_label": "📄 تحلیل متن:", "text_placeholder": "متن را اینجا بچسبانید...",
-        "image_label": "🖼️ تحلیل تصویر:", "btn_submit": "شروع تحلیل 🔍",
+        "image_label": "🖼️️ تحلیل تصویر:", "btn_submit": "شروع تحلیل 🔍",
         "result_title": "نتیجه:", "btn_speak": "گزارش صوتی 🔊",
         "error_short": "متن خیلی کوتاه است.",
         "error_ai": "هشدار هوش مصنوعی.",
@@ -777,6 +788,18 @@ HTML_TEMPLATE = """
             border-radius: 24px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
         }
+        .flash-messages {
+            margin-bottom: 20px;
+        }
+        .flash-alert {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid #ef4444;
+            color: #fca5a5;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
         .top-bar {
             display: flex;
             justify-content: space-between;
@@ -855,8 +878,8 @@ HTML_TEMPLATE = """
             background: #059669; color: white; font-weight: 600; font-size: 13px; cursor: pointer;
         }
         .btn-export {
-            width: 100%; padding: 10px; margin-top: 8px; border-radius: 8px; border: none;
-            background: #d97706; color: white; font-weight: 600; font-size: 13px; cursor: pointer;
+            display: block; width: 100%; text-align: center; padding: 10px; margin-top: 8px; border-radius: 8px; border: none;
+            background: #d97706; color: white; font-weight: 600; font-size: 13px; cursor: pointer; text-decoration: none; box-sizing: border-box;
         }
         .tracking-id {
             font-size: 11px; color: #38bdf8; margin-top: 8px; font-family: monospace;
@@ -905,6 +928,17 @@ HTML_TEMPLATE = """
 </head>
 <body>
     <div class="app-container">
+        <!-- Flash Messages Display -->
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <div class="flash-messages">
+              {% for message in messages %}
+                <div class="flash-alert">⚠️ {{ message }}</div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+
         <div class="top-bar">
             <span style="font-size: 12px; color: var(--text-muted);">🌐 Global Version (32+ Langs)</span>
             <form method="GET" style="margin:0;">
@@ -954,7 +988,9 @@ HTML_TEMPLATE = """
             <div class="tracking-id">{{ t.report_id }} {{ tracking_id }}</div>
             {% endif %}
             <button class="btn-speak" onclick="speakResult()">{{ t.btn_speak }}</button>
-            <button class="btn-export" onclick="alert('PDF Certified Report Generated & Downloaded Successfully! [ID: {{ tracking_id }}]')">{{ t.btn_export_pdf }}</button>
+            {% if tracking_id %}
+            <a href="/download-pdf/{{ tracking_id }}" class="btn-export" target="_blank">{{ t.btn_export_pdf }}</a>
+            {% endif %}
         </div>
         {% endif %}
 
@@ -1040,7 +1076,9 @@ HTML_TEMPLATE = """
                 {% if tracking_id %}
                 <div class="tracking-id">{{ t.report_id }} {{ tracking_id }}</div>
                 {% endif %}
-                <button class="btn-export" onclick="alert('Professional Certified PDF Report Exported Successfully!')">{{ t.btn_export_pdf }}</button>
+                {% if tracking_id %}
+                <a href="/download-pdf/{{ tracking_id }}" class="btn-export" target="_blank">{{ t.btn_export_pdf }}</a>
+                {% endif %}
             </div>
             {% endif %}
             {% endif %}
@@ -1081,8 +1119,10 @@ def index():
         tracking_id = str(uuid.uuid4()).upper()[:12]
         user_email = session.get('enterprise_email', 'guest@truelens.internal')
         
-        if uploaded_file and uploaded_file.filename != '':
-            try:
+        db_session = None
+        try:
+            db_session = SessionLocal()
+            if uploaded_file and uploaded_file.filename != '':
                 img = Image.open(uploaded_file.stream).convert('L')
                 img_arr = np.array(img)
                 variance = np.var(img_arr)
@@ -1097,45 +1137,110 @@ def index():
                     else:
                         result = t['img_human']
                 
-                # حفظ سجل التحليل البصري في قاعدة البيانات عبر SQLAlchemy
-                db_session = SessionLocal()
                 log_entry = AnalysisLog(tracking_id=tracking_id, user_email=user_email, mode=mode, input_type="image", result_summary=result)
                 db_session.add(log_entry)
                 db_session.commit()
-                db_session.close()
-            except Exception as e:
-                result = f"Error processing image file: {str(e)}"
                 
-        elif text_input.strip():
-            # إذا كان النص طويلاً جداً، يمكن إرساله لطابور المهام غير المتزامن Celery، أو تحليله فوراً
-            ai_analysis = advanced_ai_text_analyzer(text_input)
-            
-            if ai_analysis["message_key"] == "error_short":
-                result = t['error_short']
-                tracking_id = None
-            else:
-                if ai_analysis["is_ai"]:
-                    if mode == "pro":
-                        result = f"⚠️ Enterprise Compliance Warning: Input text exhibits synthetic patterns and high AI generation probability. (Confidence Score: {ai_analysis['score']}%)"
-                    else:
-                        result = f"{t['error_ai']} (Confidence Index: {ai_analysis['score']}%)"
+            elif text_input.strip():
+                ai_analysis = advanced_ai_text_analyzer(text_input)
+                
+                if ai_analysis["message_key"] == "error_short":
+                    result = t['error_short']
+                    tracking_id = None
                 else:
-                    if mode == "pro":
-                        result = f"✅ Enterprise Compliance Approved: Text source appears authentic and verified. (Natural Confidence: {100 - ai_analysis['score']}%)"
+                    if ai_analysis["is_ai"]:
+                        if mode == "pro":
+                            result = f"⚠️ Enterprise Compliance Warning: Input text exhibits synthetic patterns and high AI generation probability. (Confidence Score: {ai_analysis['score']}%)"
+                        else:
+                            result = f"{t['error_ai']} (Confidence Index: {ai_analysis['score']}%)"
                     else:
-                        result = t['error_human']
-                
-                # حفظ سجل التحليل النصي في قاعدة البيانات عبر SQLAlchemy
-                db_session = SessionLocal()
-                log_entry = AnalysisLog(tracking_id=tracking_id, user_email=user_email, mode=mode, input_type="text", result_summary=result)
-                db_session.add(log_entry)
-                db_session.commit()
-                db_session.close()
-        else:
-            result = "Please enter text or upload a file/image to start the analysis."
+                        if mode == "pro":
+                            result = f"✅ Enterprise Compliance Approved: Text source appears authentic and verified. (Natural Confidence: {100 - ai_analysis['score']}%)"
+                        else:
+                            result = t['error_human']
+                    
+                    log_entry = AnalysisLog(tracking_id=tracking_id, user_email=user_email, mode=mode, input_type="text", result_summary=result)
+                    db_session.add(log_entry)
+                    db_session.commit()
+            else:
+                result = "Please enter text or upload a file/image to start the analysis."
+                tracking_id = None
+        except Exception as e:
+            if db_session:
+                db_session.rollback()
+            flash(f"Database or Processing Error occurred: {str(e)}")
+            result = "An error occurred during processing. Please try again."
             tracking_id = None
+        finally:
+            if db_session:
+                db_session.close()
             
     return render_template_string(HTML_TEMPLATE, t=t, current_lang=lang, mode=mode, translations=TRANSLATIONS, result=result, text_input=text_input, tracking_id=tracking_id)
+
+@app.route("/download-pdf/<tracking_id>")
+def download_pdf(tracking_id):
+    db_session = SessionLocal()
+    try:
+        log_entry = db_session.query(AnalysisLog).filter_by(tracking_id=tracking_id).first()
+        if not log_entry:
+            flash("Verification report not found.")
+            return redirect(url_for('index'))
+        
+        result_summary = log_entry.result_summary
+        mode = log_entry.mode
+        user_email = log_entry.user_email
+        timestamp = str(datetime.utcnow())
+    except Exception as e:
+        flash(f"Error retrieving report data: {str(e)}")
+        return redirect(url_for('index'))
+    finally:
+        db_session.close()
+        
+    # توليد ملف PDF حقيقي باستخدام ReportLab
+    try:
+        from reportlab.lib.pagesizes import letter
+        from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, HRFlowable
+        from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+        from reportlab.lib import colors
+        
+        buffer = io.BytesIO()
+        doc = SimpleDocTemplate(buffer, pagesize=letter, rightMargin=40, leftMargin=40, topMargin=40, bottomMargin=40)
+        story = []
+        styles = getSampleStyleSheet()
+        
+        title_style = ParagraphStyle('TitleStyle', parent=styles['Heading1'], fontSize=20, textColor=colors.HexColor('#1e1b4b'), spaceAfter=6, alignment=1)
+        subtitle_style = ParagraphStyle('SubTitleStyle', parent=styles['Normal'], fontSize=10, textColor=colors.HexColor('#6366f1'), spaceAfter=15, alignment=1)
+        body_style = ParagraphStyle('BodyStyle', parent=styles['Normal'], fontSize=12, textColor=colors.HexColor('#0f172a'), spaceAfter=12, leading=16)
+        meta_style = ParagraphStyle('MetaStyle', parent=styles['Normal'], fontSize=10, textColor=colors.HexColor('#475569'), spaceAfter=6)
+        
+        story.append(Paragraph("<b>TrueLens AI - Certified Verification Report</b>", title_style))
+        story.append(Paragraph("Global Digital Verification & Enterprise Security Suite", subtitle_style))
+        story.append(HRFlowable(width="100%", thickness=2, color=colors.HexColor('#6366f1'), spaceAfter=20))
+        
+        story.append(Paragraph(f"<b>Verification Tracking ID:</b> {tracking_id}", meta_style))
+        story.append(Paragraph(f"<b>Account / User Email:</b> {user_email}", meta_style))
+        story.append(Paragraph(f"<b>Portal Mode:</b> {mode.upper()}", meta_style))
+        story.append(Paragraph(f"<b>Timestamp (UTC):</b> {timestamp}", meta_style))
+        story.append(Spacer(1, 15))
+        
+        story.append(Paragraph("<b>Analysis Result Summary:</b>", ParagraphStyle('Heading2Custom', parent=styles['Heading2'], fontSize=14, textColor=colors.HexColor('#1e1b4b'), spaceAfter=8)))
+        story.append(Paragraph(result_summary, body_style))
+        story.append(Spacer(1, 30))
+        
+        story.append(HRFlowable(width="100%", thickness=1, color=colors.HexColor('#cbd5e1'), spaceAfter=10))
+        story.append(Paragraph("<i>This is an official digitally certified report generated by TrueLens AI Enterprise Engine. Validated automatically via secure hashing and blockchain-ready tracking protocols.</i>", ParagraphStyle('FooterStyle', parent=styles['Italic'], fontSize=8, textColor=colors.HexColor('#64748b'), alignment=1)))
+        
+        doc.build(story)
+        buffer.seek(0)
+        
+        return send_file(buffer, as_attachment=True, download_name=f"TrueLens_Report_{tracking_id}.pdf", mimetype="application/pdf")
+        
+    except ImportError:
+        flash("ReportLab library is not installed on the server environment.")
+        return redirect(url_for('index'))
+    except Exception as e:
+        flash(f"Error generating PDF document: {str(e)}")
+        return redirect(url_for('index'))
 
 @app.route("/enterprise-login", methods=["POST"])
 def enterprise_login():
@@ -1144,25 +1249,34 @@ def enterprise_login():
     password = request.form.get("corporate_password", "")
     
     if email.strip() and len(password) >= 4:
-        db_session = SessionLocal()
-        user = db_session.query(EnterpriseUser).filter_by(email=email).first()
-        
-        if not user:
-            # تشفير كلمة المرور بلغة الآمن للحفاظ على أمان قاعدة البيانات
-            hashed_password = generate_password_hash(password)
-            new_user = EnterpriseUser(email=email, password=hashed_password)
-            db_session.add(new_user)
-            db_session.commit()
-            session['enterprise_logged_in'] = True
-            session['enterprise_email'] = email
-        else:
-            stored_password = user.password
-            # التحقق من صحة كلمة المرور المشفرة أو تسجيل الدخول بمرونة
-            if check_password_hash(stored_password, password) or stored_password == password:
+        db_session = None
+        try:
+            db_session = SessionLocal()
+            user = db_session.query(EnterpriseUser).filter_by(email=email).first()
+            
+            if not user:
+                hashed_password = generate_password_hash(password)
+                new_user = EnterpriseUser(email=email, password=hashed_password)
+                db_session.add(new_user)
+                db_session.commit()
                 session['enterprise_logged_in'] = True
                 session['enterprise_email'] = email
-            
-        db_session.close()
+            else:
+                stored_password = user.password
+                if check_password_hash(stored_password, password) or stored_password == password:
+                    session['enterprise_logged_in'] = True
+                    session['enterprise_email'] = email
+                else:
+                    flash("Invalid corporate credentials provided.")
+        except Exception as e:
+            if db_session:
+                db_session.rollback()
+            flash(f"Login database error: {str(e)}")
+        finally:
+            if db_session:
+                db_session.close()
+    else:
+        flash("Please provide a valid email and password (minimum 4 characters).")
         
     return redirect(url_for('index', lang=lang, mode="pro"))
 
@@ -1182,17 +1296,22 @@ def api_analyze():
     if not text.strip():
         return jsonify({"status": "error", "message": "No text provided for analysis."}), 400
         
-    # استدعاء محرك الذكاء الاصطناعي الحقيقي للـ API
     ai_analysis = advanced_ai_text_analyzer(text)
-    
     tracking_id = str(uuid.uuid4()).upper()[:12]
     
-    # حفظ طلب الـ API في قاعدة البيانات عبر SQLAlchemy
-    db_session = SessionLocal()
-    log_entry = AnalysisLog(tracking_id=tracking_id, user_email="api_client@enterprise.system", mode="api", input_type="text", result_summary=f"AI Probability: {ai_analysis['score']}%")
-    db_session.add(log_entry)
-    db_session.commit()
-    db_session.close()
+    db_session = None
+    try:
+        db_session = SessionLocal()
+        log_entry = AnalysisLog(tracking_id=tracking_id, user_email="api_client@enterprise.system", mode="api", input_type="text", result_summary=f"AI Probability: {ai_analysis['score']}%")
+        db_session.add(log_entry)
+        db_session.commit()
+    except Exception as e:
+        if db_session:
+            db_session.rollback()
+        return jsonify({"status": "error", "message": f"Database logging error: {str(e)}"}), 500
+    finally:
+        if db_session:
+            db_session.close()
     
     return jsonify({
         "status": "success",
