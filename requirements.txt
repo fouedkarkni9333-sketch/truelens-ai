@@ -7,3 +7,5 @@ redis
 Flask-Session
 celery
 SQLAlchemy
+numpy
+Pillow
