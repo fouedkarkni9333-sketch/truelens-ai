@@ -23,6 +23,14 @@ from celery import Celery
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "truelens_secure_enterprise_secret_key_2026")
 
+# تأمين إضافي: تحديد الحد الأقصى لحجم الملفات المرفوعة (5 ميجابايت) لمنع هجمات استنزاف الذاكرة (DoS)
+app.config['MAX_CONTENT_LENGTH'] = 5 * 1024 * 1024
+
+# تأمين إعدادات ملفات تعريف الارتباط (Cookies Security)
+app.config['SESSION_COOKIE_SECURE'] = os.environ.get("RENDER", False) or os.environ.get("HTTPS", "False").lower() == "true"
+app.config['SESSION_COOKIE_HTTPONLY'] = True
+app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
+
 # إعداد Redis والسشن الموزع (Distributed Sessions) مع معالجة الأخطاء
 REDIS_URL = os.environ.get("REDIS_URL", "redis://localhost:6379/0")
 app.config['SESSION_TYPE'] = 'redis'
@@ -691,7 +699,7 @@ TRANSLATIONS = {
     "fa": {
         "name": "فارسی (Persian)", "title": "TrueLens AI", "subtitle": "موتور جهانی تأیید اصالت",
         "text_label": "📄 تحلیل متن:", "text_placeholder": "متن را اینجا بچسبانید...",
-        "image_label": "🖼️️ تحلیل تصویر:", "btn_submit": "شروع تحلیل 🔍",
+        "image_label": "🖼 تحلیل تصویر:", "btn_submit": "شروع تحلیل 🔍",
         "result_title": "نتیجه:", "btn_speak": "گزارش صوتی 🔊",
         "error_short": "متن خیلی کوتاه است.",
         "error_ai": "هشدار هوش مصنوعی.",
@@ -1245,6 +1253,8 @@ def download_pdf(tracking_id):
 @app.route("/enterprise-login", methods=["POST"])
 def enterprise_login():
     lang = request.args.get("lang", "en")
+    if lang not in TRANSLATIONS:
+        lang = "en"
     email = request.form.get("corporate_email", "")
     password = request.form.get("corporate_password", "")
     
@@ -1283,6 +1293,8 @@ def enterprise_login():
 @app.route("/enterprise-logout")
 def enterprise_logout():
     lang = request.args.get("lang", "en")
+    if lang not in TRANSLATIONS:
+        lang = "en"
     session.pop('enterprise_logged_in', None)
     session.pop('enterprise_email', None)
     return redirect(url_for('index', lang=lang, mode="pro"))
