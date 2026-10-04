@@ -180,7 +180,8 @@ TRANSLATIONS = {
         "login_title": "Enterprise Secure Login (Banks & Corporates)", "email_label": "Corporate Email:", "pass_label": "Password:",
         "btn_login": "Secure Login 🔐", "logout": "Logout 🚪", "logged_in_as": "Logged in corporate account:",
         "wire_title": "Bank Wire Transfer & Official Invoice", "wire_desc": "Request an official proforma invoice or direct bank wire instructions (SWIFT/IBAN) for institutional payments.",
-        "btn_request_invoice": "Request Official Invoice 📑"
+        "btn_request_invoice": "Request Official Invoice 📑",
+        "admin_link": "🛠️ Admin Dashboard"
     },
     "ar": {
         "name": "العربية (Arabic)", "title": "TrueLens AI", "subtitle": "محرك التحقق الرقمي واكتشاف الذكاء الاصطناعي العالمي",
@@ -202,7 +203,8 @@ TRANSLATIONS = {
         "btn_login": "تسجيل دخول آمن 🔐", "logout": "تسجيل خروج 🚪", "logged_in_as": "مسجل الدخول بحساب المؤسسة:",
         "wire_title": "التحويل البنكي المباشر والفاتورة الرسمية",
         "wire_desc": "اطلب فاتورة شكلية رسمية (Proforma Invoice) أو تعليمات التحويل البنكي المباشر (IBAN / SWIFT) لدفع الاشتراكات المؤسسية.",
-        "btn_request_invoice": "طلب فاتورة رسمية للتحويل 📑"
+        "btn_request_invoice": "طلب فاتورة رسمية للتحويل 📑",
+        "admin_link": "🛠️️ لوحة تحكم المشرفين"
     },
     "fr": {
         "name": "Français", "title": "TrueLens AI", "subtitle": "Moteur mondial de vérification numérique et de détection IA",
@@ -219,7 +221,8 @@ TRANSLATIONS = {
         "login_title": "Connexion Sécurisée Entreprise (Banques & Corporates)", "email_label": "Email Professionnel:", "pass_label": "Mot de passe:",
         "btn_login": "Connexion Sécurisée 🔐", "logout": "Déconnexion 🚪", "logged_in_as": "Connecté au compte:",
         "wire_title": "Virement Bancaire & Facture Officielle", "wire_desc": "Demandez une facture proforma ou les instructions de virement bancaire (SWIFT/IBAN).",
-        "btn_request_invoice": "Demander une Facture 📑"
+        "btn_request_invoice": "Demander une Facture 📑",
+        "admin_link": "🛠️️ Panneau Admin"
     },
     "es": {
         "name": "Español", "title": "TrueLens AI", "subtitle": "Motor Global de Verificación Digital",
@@ -236,7 +239,8 @@ TRANSLATIONS = {
         "login_title": "Acceso Seguro para Empresas", "email_label": "Correo Corporativo:", "pass_label": "Contraseña:",
         "btn_login": "Acceso Seguro 🔐", "logout": "Cerrar Sesión 🚪", "logged_in_as": "Sesión iniciada:",
         "wire_title": "Transferencia Bancaria y Factura", "wire_desc": "Solicite una factura proforma o instrucciones de transferencia (SWIFT/IBAN).",
-        "btn_request_invoice": "Solicitar Factura Oficial 📑"
+        "btn_request_invoice": "Solicitar Factura Oficial 📑",
+        "admin_link": "🛠️ Panel de Admin"
     },
     "de": {
         "name": "Deutsch", "title": "TrueLens AI", "subtitle": "Globales System zur digitalen Verifikation",
@@ -253,7 +257,8 @@ TRANSLATIONS = {
         "login_title": "Sicherer Login für Unternehmen", "email_label": "Unternehmens-E-Mail:", "pass_label": "Passwort:",
         "btn_login": "Sicherer Login 🔐", "logout": "Abmelden 🚪", "logged_in_as": "Eingeloggt als:",
         "wire_title": "Banküberweisung & Offizielle Rechnung", "wire_desc": "Fordern Sie eine Proforma-Rechnung oder Überweisungsdetails (SWIFT/IBAN) an.",
-        "btn_request_invoice": "Offizielle Rechnung anfordern 📑"
+        "btn_request_invoice": "Offizielle Rechnung anfordern 📑",
+        "admin_link": "🛠️ Admin-Bereich"
     },
     "zh": {
         "name": "中文 (Chinese)", "title": "TrueLens AI", "subtitle": "全球数字验证与AI检测引擎",
@@ -270,7 +275,8 @@ TRANSLATIONS = {
         "login_title": "企业与银行安全登录", "email_label": "企业邮箱:", "pass_label": "密码:",
         "btn_login": "安全登录 🔐", "logout": "登出 🚪", "logged_in_as": "已登录账号:",
         "wire_title": "银行电汇与官方发票", "wire_desc": "申请正式形式发票或直接银行电汇说明（SWIFT/IBAN）。",
-        "btn_request_invoice": "申请官方发票 📑"
+        "btn_request_invoice": "申请官方发票 📑",
+        "admin_link": "🛠️️ 管理员面板"
     },
     "ja": {
         "name": "日本語 (Japanese)", "title": "TrueLens AI", "subtitle": "グローバルデジタル検証エンジン",
@@ -287,7 +293,8 @@ TRANSLATIONS = {
         "login_title": "法人セキュアログイン", "email_label": "企業メール:", "pass_label": "パスワード:",
         "btn_login": "安全にログイン 🔐", "logout": "ログアウト 🚪", "logged_in_as": "ログイン中:",
         "wire_title": "銀行振込・公式請求書", "wire_desc": "請求書（プロフォーマ）または銀行振込先情報（SWIFT/IBAN）の請求。",
-        "btn_request_invoice": "公式請求書を請求する 📑"
+        "btn_request_invoice": "公式請求書を請求する 📑",
+        "admin_link": "🛠️ 管理画面"
     },
     "it": {
         "name": "Italiano", "title": "TrueLens AI", "subtitle": "Motore di Verifica Globale",
@@ -304,7 +311,8 @@ TRANSLATIONS = {
         "login_title": "Accesso Sicuro Aziendale", "email_label": "Email Aziendale:", "pass_label": "Password:",
         "btn_login": "Accesso Sicuro 🔐", "logout": "Esci 🚪", "logged_in_as": "Connesso come:",
         "wire_title": "Bonifico Bancario e Fattura Ufficiale", "wire_desc": "Richiedi una fattura proforma o le istruzioni per bonifico bancario (SWIFT/IBAN).",
-        "btn_request_invoice": "Richiedi Fattura Ufficiale 📑"
+        "btn_request_invoice": "Richiedi Fattura Ufficiale 📑",
+        "admin_link": "🛠️ Pannello Admin"
     },
     "pt": {
         "name": "Português", "title": "TrueLens AI", "subtitle": "Motor Global de Verificação",
@@ -321,7 +329,8 @@ TRANSLATIONS = {
         "login_title": "Login Corporativo Seguro", "email_label": "E-mail Corporativo:", "pass_label": "Senha:",
         "btn_login": "Login Seguro 🔐", "logout": "Sair 🚪", "logged_in_as": "Conectado como:",
         "wire_title": "Transferência Bancária e Fatura Oficial", "wire_desc": "Solicite uma fatura proforma ou instruções de transferência bancária (SWIFT/IBAN).",
-        "btn_request_invoice": "Solicitar Fatura Oficial 📑"
+        "btn_request_invoice": "Solicitar Fatura Oficial 📑",
+        "admin_link": "🛠️️ Painel Admin"
     },
     "ru": {
         "name": "Русский (Russian)", "title": "TrueLens AI", "subtitle": "Глобальный движок проверки",
@@ -338,7 +347,8 @@ TRANSLATIONS = {
         "login_title": "Защищенный вход для бизнеса", "email_label": "Корпоративный Email:", "pass_label": "Пароль:",
         "btn_login": "Безопасный вход 🔐", "logout": "Выйти 🚪", "logged_in_as": "Вход выполнен:",
         "wire_title": "Банковский перевод и официальный счет", "wire_desc": "Запросите счет-проформу или реквизиты банковского перевода (SWIFT/IBAN).",
-        "btn_request_invoice": "Запросить официальный счет 📑"
+        "btn_request_invoice": "Запросить официальный счет 📑",
+        "admin_link": "🛠️ Панель администратора"
     },
     "hi": {
         "name": "हिन्दी (Hindi)", "title": "TrueLens AI", "subtitle": "वैश्विक डिजिटल सत्यापन इंजन",
@@ -355,7 +365,8 @@ TRANSLATIONS = {
         "login_title": "कॉर्पोरेट सुरक्षित लॉगिन", "email_label": "कॉर्पोरेट ईमेल:", "pass_label": "पासवर्ड:",
         "btn_login": "सुरक्षित लॉगिन 🔐", "logout": "लॉग आउट 🚪", "logged_in_as": "लॉग इन किया गया:",
         "wire_title": "बैंक वायर ट्रांसफर और आधिकारिक चालान", "wire_desc": "संस्थागत भुगतानों के लिए औपचारिक चालान या सीधे बैंक वायर निर्देश (SWIFT/IBAN) का अनुरोध करें।",
-        "btn_request_invoice": "आधिकारिक चालान का अनुरोध करें 📑"
+        "btn_request_invoice": "आधिकारिक चालान का अनुरोध करें 📑",
+        "admin_link": "🛠️ व्यवस्थापक पैनल"
     },
     "tr": {
         "name": "Türkçe", "title": "TrueLens AI", "subtitle": "Küresel Dijital Doğrulama Motoru",
@@ -372,7 +383,8 @@ TRANSLATIONS = {
         "login_title": "Kurumsal Güvenli Giriş", "email_label": "Kurumsal E-posta:", "pass_label": "Şifre:",
         "btn_login": "Güvenli Giriş 🔐", "logout": "Çıkış 🚪", "logged_in_as": "Giriş yapılan hesap:",
         "wire_title": "Banka Havalesi ve Resmi Fatura", "wire_desc": "Kurumsal ödemeler için proforma fatura veya doğrudan banka havale talimatları (SWIFT/IBAN) isteyin.",
-        "btn_request_invoice": "Resmi Fatura Talep Et 📑"
+        "btn_request_invoice": "Resmi Fatura Talep Et 📑",
+        "admin_link": "🛠️ Yönetici Paneli"
     },
     "ko": {
         "name": "한국어 (Korean)", "title": "TrueLens AI", "subtitle": "글로벌 디지털 검증 엔진",
@@ -389,7 +401,8 @@ TRANSLATIONS = {
         "login_title": "기업 보안 로그인", "email_label": "기업 이메일:", "pass_label": "비밀번호:",
         "btn_login": "안전한 로그인 🔐", "logout": "로그아웃 🚪", "logged_in_as": "로그인 계정:",
         "wire_title": "은행 송금 및 공식 인보이스", "wire_desc": "기관 결제를 위한 견적 송장 또는 직접 은행 송금 지침(SWIFT/IBAN)을 요청하세요.",
-        "btn_request_invoice": "공식 인보이스 요청 📑"
+        "btn_request_invoice": "공식 인보이스 요청 📑",
+        "admin_link": "🛠️ 관리자 대시보드"
     },
     "nl": {
         "name": "Nederlands", "title": "TrueLens AI", "subtitle": "Wereldwijde Verificatie Engine",
@@ -406,7 +419,8 @@ TRANSLATIONS = {
         "login_title": "Zakelijk Veilige Login", "email_label": "Zakelijk E-mailadres:", "pass_label": "Wachtwoord:",
         "btn_login": "Veilig Inloggen 🔐", "logout": "Uitloggen 🚪", "logged_in_as": "Ingelogd als:",
         "wire_title": "Bankoverschrijving & Officiële Factuur", "wire_desc": "Vraag een proforma factuur of directe bankoverboekingsinstructies (SWIFT/IBAN) aan.",
-        "btn_request_invoice": "Vraag Officiële Factuur aan 📑"
+        "btn_request_invoice": "Vraag Officiële Factuur aan 📑",
+        "admin_link": "🛠️ Beheerderspaneel"
     },
     "pl": {
         "name": "Polski", "title": "TrueLens AI", "subtitle": "Globalny Silnik Weryfikacji",
@@ -423,7 +437,8 @@ TRANSLATIONS = {
         "login_title": "Bezpieczne logowanie korporacyjne", "email_label": "Email firmowy:", "pass_label": "Hasło:",
         "btn_login": "Bezpieczne logowanie 🔐", "logout": "Wyloguj 🚪", "logged_in_as": "Zalogowano jako:",
         "wire_title": "Przelew bankowy i oficjalna faktura", "wire_desc": "Poproś o fakturę proforma lub instrukcje przelewu bankowego (SWIFT/IBAN) dla płatności instytucjonalnych.",
-        "btn_request_invoice": "Zamów oficjalną fakturę 📑"
+        "btn_request_invoice": "Zamów oficjalną fakturę 📑",
+        "admin_link": "🛠️ Panel Administratora"
     },
     "vi": {
         "name": "Tiếng Việt", "title": "TrueLens AI", "subtitle": "Công cụ Xác thực Toàn cầu",
@@ -440,7 +455,8 @@ TRANSLATIONS = {
         "login_title": "Đăng nhập Doanh nghiệp Bảo mật", "email_label": "Email Doanh nghiệp:", "pass_label": "Mật khẩu:",
         "btn_login": "Đăng nhập An toàn 🔐", "logout": "Đăng xuất 🚪", "logged_in_as": "Đã đăng nhập:",
         "wire_title": "Chuyển khoản Ngân hàng & Hóa đơn Chính thức", "wire_desc": "Yêu cầu hóa đơn chiếu lệ hoặc hướng dẫn chuyển khoản ngân hàng trực tiếp (SWIFT/IBAN).",
-        "btn_request_invoice": "Yêu cầu Hóa đơn Chính thức 📑"
+        "btn_request_invoice": "Yêu cầu Hóa đơn Chính thức 📑",
+        "admin_link": "🛠️ Bảng Quản trị"
     },
     "id": {
         "name": "Bahasa Indonesia", "title": "TrueLens AI", "subtitle": "Mesin Verifikasi Global",
@@ -457,7 +473,8 @@ TRANSLATIONS = {
         "login_title": "Login Korporat Aman", "email_label": "Email Perusahaan:", "pass_label": "Kata Sandi:",
         "btn_login": "Login Aman 🔐", "logout": "Keluar 🚪", "logged_in_as": "Masuk sebagai:",
         "wire_title": "Transfer Bank & Faktur Resmi", "wire_desc": "Minta faktur proforma atau instruksi transfer bank langsung (SWIFT/IBAN) untuk pembayaran institusional.",
-        "btn_request_invoice": "Minta Faktur Resmi 📑"
+        "btn_request_invoice": "Minta Faktur Resmi 📑",
+        "admin_link": "🛠️ Panel Admin"
     },
     "sv": {
         "name": "Svenska", "title": "TrueLens AI", "subtitle": "Global Verifieringsmotor",
@@ -475,7 +492,8 @@ TRANSLATIONS = {
         "btn_login": "Säker Inloggning 🔐", "logout": "Logga ut 🚪", "logged_in_as": "Inloggad som:",
         "wire_title": "Banköverföring och Officiell Faktura",
         "wire_desc": "Begär en proformafaktura eller direkt banköverföringsinstruktion (SWIFT/IBAN) för institutionella betalningar.",
-        "btn_request_invoice": "Begär Officiell Faktura 📑"
+        "btn_request_invoice": "Begär Officiell Faktura 📑",
+        "admin_link": "🛠️ Adminpanel"
     },
     "uk": {
         "name": "Українська (Ukrainian)", "title": "TrueLens AI", "subtitle": "Глобальний рушій перевірки",
@@ -492,7 +510,8 @@ TRANSLATIONS = {
         "login_title": "Захищений корпоративний вхід", "email_label": "Корпоративний Email:", "pass_label": "Пароль:",
         "btn_login": "Безпечний вхід 🔐", "logout": "Вийти 🚪", "logged_in_as": "Увійшов як:",
         "wire_title": "Банківський переказ та офіційний рахунок", "wire_desc": "Запит рахунку-проформи або реквізитів банківського переказу (SWIFT/IBAN).",
-        "btn_request_invoice": "Запросити офіційний рахунок 📑"
+        "btn_request_invoice": "Запросити офіційний рахунок 📑",
+        "admin_link": "🛠️ Панель адміністратора"
     },
     "el": {
         "name": "Ελληνικά (Greek)", "title": "TrueLens AI", "subtitle": "Παγκόσμια Μηχανή Επαλήθευσης",
@@ -509,7 +528,8 @@ TRANSLATIONS = {
         "login_title": "Ασφαλής Είσοδος Επιχείρησης", "email_label": "Εταιρικό Email:", "pass_label": "Κωδικός:",
         "btn_login": "Ασφαλής Σύνδεση 🔐", "logout": "Αποσύνδεση 🚪", "logged_in_as": "Συνδεδεμένος ως:",
         "wire_title": "Τραπεζικό Έμβασμα & Επίσημο Timologio", "wire_desc": "Ζητήστε τιμολόγιο proforma ή οδηγίες τραπεζικού εμβάσματος (SWIFT/IBAN).",
-        "btn_request_invoice": "Αίτηση Επίσημου Timologiou 📑"
+        "btn_request_invoice": "Αίτηση Επίσημου Timologiou 📑",
+        "admin_link": "🛠️ Πίνακας Διαχείρισης"
     },
     "he": {
         "name": "עברית (Hebrew)", "title": "TrueLens AI", "subtitle": "מנוע אימות דיגיטלי עולמי",
@@ -526,7 +546,8 @@ TRANSLATIONS = {
         "login_title": "כניסת אבטחה ארגונית", "email_label": "דוא\"ל ארגוני:", "pass_label": "סיסמה:",
         "btn_login": "התחברות מאובטחת 🔐", "logout": "התנתק 🚪", "logged_in_as": "מחובר כחשבון:",
         "wire_title": "העברה בנקאית וחשבונית רשמית", "wire_desc": "בקש חשבונית פרופורמה או הוראות העברה בנקאית ישירה (SWIFT/IBAN).",
-        "btn_request_invoice": "בקש חשבונית רשמית 📑"
+        "btn_request_invoice": "בקש חשבונית רשמית 📑",
+        "admin_link": "🛠️ לוח בקרה למנהלים"
     },
     "ro": {
         "name": "Română", "title": "TrueLens AI", "subtitle": "Motor Global de Verificare",
@@ -543,7 +564,8 @@ TRANSLATIONS = {
         "login_title": "Autentificare Corporativă Securizată", "email_label": "Email Corporativ:", "pass_label": "Parolă:",
         "btn_login": "Autentificare Securizată 🔐", "logout": "Deconectare 🚪", "logged_in_as": "Autentificat ca:",
         "wire_title": "Transfer Bancar și Factură Oficială", "wire_desc": "Solicitați o factură proforma sau instrucțiuni directe de transfer bancar (SWIFT/IBAN).",
-        "btn_request_invoice": "Solicită Factură Oficială 📑"
+        "btn_request_invoice": "Solicită Factură Oficială 📑",
+        "admin_link": "🛠️ Panou Administrator"
     },
     "hu": {
         "name": "Magyar", "title": "TrueLens AI", "subtitle": "Globális Ellenőrző Motor",
@@ -560,7 +582,8 @@ TRANSLATIONS = {
         "login_title": "Biztonságos Vállalati Bejelentkezés", "email_label": "Vállalati E-mail:", "pass_label": "Jelszó:",
         "btn_login": "Biztonságos Bejelentkezés 🔐", "logout": "Kijelentkezés 🚪", "logged_in_as": "Bejelentkezve mint:",
         "wire_title": "Banki Átutalás és Hivatalos Számla", "wire_desc": "Igényeljen proforma számlát vagy közvetlen banki átutalási útmutatót (SWIFT/IBAN).",
-        "btn_request_invoice": "Hivatalos Számla Igénylése 📑"
+        "btn_request_invoice": "Hivatalos Számla Igénylése 📑",
+        "admin_link": "🛠️ Adminisztrációs Panel"
     },
     "cs": {
         "name": "Čeština", "title": "TrueLens AI", "subtitle": "Globální Ověřovací Motor",
@@ -578,7 +601,8 @@ TRANSLATIONS = {
         "login_title": "Zabezpečené firemní přihlášení", "email_label": "Firemní E-mail:", "pass_label": "Heslo:",
         "btn_login": "Zabezpečené přihlášení 🔐", "logout": "Odhlásit 🚪", "logged_in_as": "Přihlášen jako:",
         "wire_title": "Bankovní převod a oficiální faktura", "wire_desc": "Vyžádejte si proforma fakturu nebo instrukcje k bankovnímu převodu (SWIFT/IBAN).",
-        "btn_request_invoice": "Vyžádat oficiální fakturu 📑"
+        "btn_request_invoice": "Vyžádat oficiální fakturu 📑",
+        "admin_link": "🛠️ Administrátorský panel"
     },
     "th": {
         "name": "ไทย (Thai)", "title": "TrueLens AI", "subtitle": "เครื่องมือตรวจสอบดิจิทัลระดับโลก",
@@ -596,7 +620,8 @@ TRANSLATIONS = {
         "btn_login": "เข้าสู่ระบบอย่างปลอดภัย 🔐", "logout": "ออกจากระบบ 🚪", "logged_in_as": "เข้าสู่ระบบในฐานะ:",
         "wire_title": "การโอนเงินผ่านธนาคารและใบแจ้งหนี้ทางการ",
         "wire_desc": "ขอใบแจ้งหนี้ Proforma หรือคำแนะนำการโอนเงินผ่านธนาคารโดยตรง (SWIFT/IBAN) สำหรับการชำระเงินขององค์กร",
-        "btn_request_invoice": "ขอใบแจ้งหนี้ทางการ 📑"
+        "btn_request_invoice": "ขอใบแจ้งหนี้ทางการ 📑",
+        "admin_link": "🛠️ แผงผู้ดูแลระบบ"
     },
     "fi": {
         "name": "Suomi", "title": "TrueLens AI", "subtitle": "Globaali Varmennusmoottori",
@@ -613,7 +638,8 @@ TRANSLATIONS = {
         "login_title": "Turvallinen yrityskirjautuminen", "email_label": "Yrityksen sähköposti:", "pass_label": "Salasana:",
         "btn_login": "Turvallinen kirjautuminen 🔐", "logout": "Kirjaudu ulos 🚪", "logged_in_as": "Kirjautunut:",
         "wire_title": "Pankkisiirto ja virallinen lasku", "wire_desc": "Pyydä proforma-lasku tai suorat pankkisiirto-ohjeet (SWIFT/IBAN).",
-        "btn_request_invoice": "Pyydä virallinen lasku 📑"
+        "btn_request_invoice": "Pyydä virallinen lasku 📑",
+        "admin_link": "🛠️ Ylläpitopaneeli"
     },
     "da": {
         "name": "Dansk", "title": "TrueLens AI", "subtitle": "Global Verificeringsmotor",
@@ -630,7 +656,8 @@ TRANSLATIONS = {
         "login_title": "Sikker Erhvervslogin", "email_label": "Virksomheds-e-mail:", "pass_label": "Adgangskode:",
         "btn_login": "Sikker Login 🔐", "logout": "Log ud 🚪", "logged_in_as": "Logget ind som:",
         "wire_title": "Bankoverførsel og Officiel Faktura", "wire_desc": "Anmod om en proformafaktura eller direkt bankoverførselsinstruktion (SWIFT/IBAN).",
-        "btn_request_invoice": "Anmod om Officiel Faktura 📑"
+        "btn_request_invoice": "Anmod om Officiel Faktura 📑",
+        "admin_link": "🛠️ Administratorpanel"
     },
     "no": {
         "name": "Norsk", "title": "TrueLens AI", "subtitle": "Global Verifiseringsmotor",
@@ -647,7 +674,8 @@ TRANSLATIONS = {
         "login_title": "Sikker bedriftspålogging", "email_label": "Bedrifts-e-post:", "pass_label": "Passord:",
         "btn_login": "Sikker pålogging 🔐", "logout": "Logg ut 🚪", "logged_in_as": "Logget inn som:",
         "wire_title": "Bankoverføring og Offisiell Faktura", "wire_desc": "Be om en proformafaktura eller direkte bankoverføringsinstruksjoner (SWIFT/IBAN).",
-        "btn_request_invoice": "Be om offisiell faktura 📑"
+        "btn_request_invoice": "Be om offisiell faktura 📑",
+        "admin_link": "🛠️ Admin-panel"
     },
     "ms": {
         "name": "Bahasa Melayu", "title": "TrueLens AI", "subtitle": "Enjin Pengesahan Global",
@@ -664,7 +692,8 @@ TRANSLATIONS = {
         "login_title": "Log Masuk Korporat Selamat", "email_label": "E-mel Syarikat:", "pass_label": "Kata Laluan:",
         "btn_login": "Log Masuk Selamat 🔐", "logout": "Log Keluar 🚪", "logged_in_as": "Log masuk sebagai:",
         "wire_title": "Pindahan Bank & Invois Rasmi", "wire_desc": "Minta invois proforma atau arahan pindahan bank langsung (SWIFT/IBAN).",
-        "btn_request_invoice": "Minta Invois Rasmi 📑"
+        "btn_request_invoice": "Minta Invois Rasmi 📑",
+        "admin_link": "🛠️ Panel Pentadbir"
     },
     "bn": {
         "name": "বাংলা (Bengali)", "title": "TrueLens AI", "subtitle": "গ্লোবাল ভেরিফিকেশন ইঞ্জিন",
@@ -694,7 +723,8 @@ TRANSLATIONS = {
         "logged_in_as": "লগইন করা আছে:",
         "wire_title": "ব্যাংক ওয়্যার ট্রান্সফার এবং অফিসিয়াল চালান",
         "wire_desc": "প্রাতিষ্ঠানিক পেমেন্টের জন্য প্রোফর্মা চালান বা সরাসরি ব্যাংক ওয়্যার নির্দেশাবলী (SWIFT/IBAN) অনুরোধ করুন।",
-        "btn_request_invoice": "অফিসিয়াল চালান অনুরোধ করুন 📑"
+        "btn_request_invoice": "অফিসিয়াল চালান অনুরোধ করুন 📑",
+        "admin_link": "🛠️ অ্যাডমিন প্যানেল"
     },
     "fa": {
         "name": "فارسی (Persian)", "title": "TrueLens AI", "subtitle": "موتور جهانی تأیید اصالت",
@@ -724,7 +754,8 @@ TRANSLATIONS = {
         "logged_in_as": "وارد شده با حساب:",
         "wire_title": "انتقال بانکی و فاکتور رسمی",
         "wire_desc": "درخواست فاکتور پروفرما یا دستورالعمل انتقال بانکی مستقیم (SWIFT/IBAN).",
-        "btn_request_invoice": "درخواست فاکتور رسمی 📑"
+        "btn_request_invoice": "درخواست فاکتور رسمی 📑",
+        "admin_link": "🛠️️ پنل مدیریت"
     },
     "ur": {
         "name": "اردو (Urdu)", "title": "TrueLens AI", "subtitle": "عالمی ڈیجیٹل تصدیقی انجن",
@@ -754,7 +785,8 @@ TRANSLATIONS = {
         "logged_in_as": "لاگ ان اکاؤنٹ:",
         "wire_title": "بینک وائر ٹرانسفر اور آفیشل انوイス",
         "wire_desc": "ادارہ جاتی ادایگیوں کے لیے پروفرما انوائس یا براہ راست بینک وائر ہدایات (SWIFT/IBAN) کی درخواست کریں۔",
-        "btn_request_invoice": "آفیشل انوائس کی درخواست کریں 📑"
+        "btn_request_invoice": "آفیشل انوائس کی درخواست کریں 📑",
+        "admin_link": "🛠️ ایڈمن پینل"
     }
 }
 
@@ -932,6 +964,19 @@ HTML_TEMPLATE = """
             border-radius: 12px;
             margin-top: 15px;
         }
+        .admin-nav {
+            text-align: right;
+            margin-bottom: 15px;
+        }
+        .admin-link-btn {
+            background: #334155;
+            color: #38bdf8;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            text-decoration: none;
+            font-weight: 600;
+        }
     </style>
 </head>
 <body>
@@ -957,6 +1002,10 @@ HTML_TEMPLATE = """
                     {% endfor %}
                 </select>
             </form>
+        </div>
+
+        <div class="admin-nav">
+            <a href="/admin-dashboard?lang={{ current_lang }}" class="admin-link-btn" target="_blank">{{ t.admin_link }}</a>
         </div>
 
         <div class="header">
@@ -1298,6 +1347,92 @@ def enterprise_logout():
     session.pop('enterprise_logged_in', None)
     session.pop('enterprise_email', None)
     return redirect(url_for('index', lang=lang, mode="pro"))
+
+# ==========================================
+# 🛠️ لوحة تحكم المشرفين الإضافية (Admin Dashboard Route)
+# ==========================================
+@app.route("/admin-dashboard")
+def admin_dashboard():
+    lang = request.args.get("lang", "en")
+    if lang not in TRANSLATIONS:
+        lang = "en"
+    
+    db_session = SessionLocal()
+    try:
+        logs = db_session.query(AnalysisLog).order_by(AnalysisLog.id.desc()).limit(50).all()
+        users = db_session.query(EnterpriseUser).all()
+        total_logs = db_session.query(AnalysisLog).count()
+        total_users = db_session.query(EnterpriseUser).count()
+    except Exception as e:
+        logs = []
+        users = []
+        total_logs = 0
+        total_users = 0
+    finally:
+        db_session.close()
+
+    admin_html = f"""
+    <!doctype html>
+    <html lang="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <title>TrueLens AI - Admin Control Dashboard</title>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+        <style>
+            body {{ font-family: 'Inter', sans-serif; background: #0b0f19; color: #f8fafc; padding: 30px; margin: 0; }}
+            .container {{ max-width: 1000px; margin: auto; background: #1e1b4b; border: 1px solid #312e81; padding: 30px; border-radius: 20px; }}
+            h1 {{ color: #38bdf8; margin-top: 0; }}
+            .stats {{ display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 25px; }}
+            .stat-card {{ background: #0f172a; padding: 15px; border-radius: 12px; border: 1px solid #334155; }}
+            .stat-card h3 {{ margin: 0; color: #818cf8; font-size: 14px; }}
+            .stat-card p {{ margin: 5px 0 0 0; font-size: 24px; font-weight: bold; color: #38bdf8; }}
+            table {{ width: 100%; border-collapse: collapse; margin-top: 15px; background: #0f172a; border-radius: 10px; overflow: hidden; }}
+            th, td {{ padding: 12px; text-align: left; border-bottom: 1px solid #1e293b; font-size: 13px; }}
+            th {{ background: #1e293b; color: #38bdf8; }}
+            tr:hover {{ background: #111827; }}
+            .back-link {{ display: inline-block; margin-bottom: 20px; color: #818cf8; text-decoration: none; font-weight: 600; }}
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <a href="/?lang={lang}" class="back-link">← Back to Main Application</a>
+            <h1>🛠️ Enterprise Admin Control Dashboard</h1>
+            <div class="stats">
+                <div class="stat-card">
+                    <h3>Total Analysis Logs</h3>
+                    <p>{total_logs}</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Registered Corporate Users</h3>
+                    <p>{total_users}</p>
+                </div>
+            </div>
+            
+            <h3 style="color: #cbd5e1; margin-top: 30px;">Recent Verification Activity Logs</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Tracking ID</th>
+                        <th>User Email</th>
+                        <th>Mode</th>
+                        <th>Input Type</th>
+                        <th>Result Summary</th>
+                    </tr>
+                </thead>
+                <tbody>
+    """
+    for log in logs:
+        admin_html += f"<tr><td>{log.id}</td><td><code>{log.tracking_id}</code></td><td>{log.user_email}</td><td>{log.mode}</td><td>{log.input_type}</td><td>{log.result_summary[:60]}...</td></tr>"
+    
+    admin_html += """
+                </tbody>
+            </table>
+        </div>
+    </body>
+    </html>
+    """
+    return admin_html
 
 # مسار API مخصص للشركات (Enterprise API Endpoint)
 @app.route("/api/v1/analyze", methods=["POST"])
